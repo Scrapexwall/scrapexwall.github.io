@@ -45,32 +45,38 @@
         .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; opacity: 0; }
         .card img.loaded { opacity: 1; }
         
-        .info { padding: 18px; display: flex; gap: 10px; }
-        .download-btn { flex: 2; background: var(--blue); color: white; text-decoration: none; padding: 12px; border-radius: 14px; font-weight: 700; font-size: 0.85rem; text-align: center; }
-        .copy-btn { flex: 1; background: var(--border); color: var(--text); border: none; padding: 12px; border-radius: 14px; cursor: pointer; }
+        .info { padding: 18px; display: flex; gap: 10px; position: relative; }
+        
+        /* NEW DOWNLOAD SYSTEM */
+        .dl-container { position: relative; flex: 2; }
+        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 14px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        
+        .dl-menu { 
+            display: none; position: absolute; bottom: 110%; left: 0; width: 100%; 
+            background: var(--card); border: 1px solid var(--border); border-radius: 12px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); z-index: 100; overflow: hidden;
+        }
+        .dl-menu.active { display: block; animation: popUp 0.3s ease; }
+        @keyframes popUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .dl-item { 
+            padding: 12px; font-size: 0.8rem; font-weight: 600; color: var(--text); 
+            text-decoration: none; display: flex; justify-content: space-between; transition: 0.2s;
+        }
+        .dl-item:hover { background: var(--blue); color: white; }
+        .dl-item span { opacity: 0.6; font-size: 0.7rem; }
+        .dl-item:hover span { opacity: 1; }
+
+        .copy-btn { flex: 1; background: var(--border); color: var(--text); border: none; padding: 12px; border-radius: 14px; cursor: pointer; font-weight: 600; }
 
         /* LIVE PREVIEW MODAL STYLES */
         #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(12px); flex-direction: column; }
-        
-        /* Phone Mockup */
-        .phone-frame { 
-            width: 280px; 
-            height: 580px; 
-            border: 8px solid #111; 
-            border-radius: 40px; 
-            position: relative; 
-            overflow: hidden; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.5), 0 0 0 2px #333;
-            background: #000;
-        }
+        .phone-frame { width: 280px; height: 580px; border: 8px solid #111; border-radius: 40px; position: relative; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.5), 0 0 0 2px #333; background: #000; }
         .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 25px; background: #111; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; z-index: 10; }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
-        
         .phone-time { position: absolute; top: 40px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 300; z-index: 5; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .phone-date { position: absolute; top: 100px; width: 100%; text-align: center; color: white; font-size: 1rem; z-index: 5; }
-
-        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 35px; color: white; cursor: pointer; opacity: 0.7; transition: 0.3s; }
-        #close-modal:hover { opacity: 1; }
+        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 35px; color: white; cursor: pointer; opacity: 0.7; }
 
         #loader { text-align: center; padding: 100px; font-weight: bold; color: var(--blue); }
         footer { text-align: center; padding: 30px; opacity: 0.6; font-size: 13px; position: relative; }
@@ -103,7 +109,7 @@
         <div class="phone-frame">
             <div class="phone-notch"></div>
             <div class="phone-time" id="phone-time">12:00</div>
-            <div class="phone-date">Thursday, Feb 12</div>
+            <div class="phone-date" id="phone-date">Thursday, Feb 12</div>
             <img id="modal-img" src="">
         </div>
         <p style="color: white; margin-top: 20px; font-weight: 600; opacity: 0.8;">Live Preview</p>
@@ -113,7 +119,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
-        // PWA Service Worker Registration
+        // PWA Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
@@ -144,19 +150,10 @@
             themeBtn.innerText = isDark ? '🌙' : '☀️';
         };
 
-        function toggleFav(id, btn) {
-            const index = favorites.indexOf(id);
-            if (index > -1) {
-                favorites.splice(index, 1);
-                btn.classList.remove('active');
-                btn.innerHTML = '♡';
-            } else {
-                favorites.push(id);
-                btn.classList.add('active');
-                btn.innerHTML = '❤️';
-            }
-            localStorage.setItem('scrapeX_favs', JSON.stringify(favorites));
-            if(document.getElementById('sort-select').value === 'fav') render(allData.filter(img => favorites.includes(img.id)));
+        function toggleDlMenu(id) {
+            const menus = document.querySelectorAll('.dl-menu');
+            menus.forEach(m => { if(m.id !== `menu-${id}`) m.classList.remove('active') });
+            document.getElementById(`menu-${id}`).classList.toggle('active');
         }
 
         function render(data) {
@@ -168,17 +165,23 @@
                 card.className = 'card';
                 const thumb = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1000`;
                 const full = `https://drive.google.com/uc?export=download&id=${img.id}`;
-                const isFav = favorites.includes(img.id);
+                const standard = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1920`; // 1080p approx
                 
                 card.innerHTML = `
-                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
-                        ${isFav ? '❤️' : '♡'}
+                    <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
+                        ${favorites.includes(img.id) ? '❤️' : '♡'}
                     </button>
                     <div class="img-box" onclick="openPreview('${thumb}')">
                         <img src="${thumb}" onload="this.classList.add('loaded')">
                     </div>
                     <div class="info">
-                        <a href="${full}" target="_blank" class="download-btn">DOWNLOAD</a>
+                        <div class="dl-container">
+                            <button class="download-btn" onclick="toggleDlMenu('${img.id}')">DOWNLOAD ▾</button>
+                            <div class="dl-menu" id="menu-${img.id}">
+                                <a href="${full}" target="_blank" class="dl-item">Original Quality <span>4K</span></a>
+                                <a href="${standard}" target="_blank" class="dl-item">Standard Quality <span>1080p</span></a>
+                            </div>
+                        </div>
                         <button class="copy-btn" onclick="navigator.clipboard.writeText('${full}').then(()=>alert('Link Copied!'))">COPY</button>
                     </div>`;
                 gallery.appendChild(card);
@@ -186,42 +189,46 @@
             });
         }
 
+        function toggleFav(id, btn) {
+            const index = favorites.indexOf(id);
+            if (index > -1) { favorites.splice(index, 1); btn.classList.remove('active'); btn.innerHTML = '♡'; }
+            else { favorites.push(id); btn.classList.add('active'); btn.innerHTML = '❤️'; }
+            localStorage.setItem('scrapeX_favs', JSON.stringify(favorites));
+        }
+
         async function start() {
             try {
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
                 allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
-                
-                const hr = new Date().getHours();
-                document.getElementById('greeting').innerText = hr < 12 ? "🌅 Good Morning!" : (hr < 18 ? "☀️ Good Afternoon!" : "🌙 Good Evening!");
-                
+                document.getElementById('greeting').innerText = new Date().getHours() < 12 ? "🌅 Good Morning!" : (new Date().getHours() < 18 ? "☀️ Good Afternoon!" : "🌙 Good Evening!");
                 render(allData);
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
         start();
 
-        // LIVE PREVIEW LOGIC
-        const modal = document.getElementById('preview-modal');
         function openPreview(url) { 
             document.getElementById('modal-img').src = url; 
-            modal.style.display = 'flex'; 
-            updatePhoneTime();
-        }
-        
-        function updatePhoneTime() {
+            document.getElementById('preview-modal').style.display = 'flex'; 
             const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('phone-time').innerText = timeStr;
+            document.getElementById('phone-time').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('phone-date').innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
         }
 
-        document.getElementById('close-modal').onclick = () => modal.style.display = 'none';
-        window.onclick = (event) => { if (event.target == modal) modal.style.display = 'none'; };
+        document.getElementById('close-modal').onclick = () => document.getElementById('preview-modal').style.display = 'none';
+        
+        // Close menu when clicking outside
+        window.onclick = (e) => {
+            if (!e.target.matches('.download-btn')) {
+                document.querySelectorAll('.dl-menu').forEach(m => m.classList.remove('active'));
+            }
+            if (e.target == document.getElementById('preview-modal')) document.getElementById('preview-modal').style.display = 'none';
+        };
 
         document.getElementById('sort-select').onchange = (e) => {
-            const val = e.target.value;
             let displayData = [...allData];
-            if (val === 'old') displayData.reverse();
-            else if (val === 'fav') displayData = allData.filter(img => favorites.includes(img.id));
+            if (e.target.value === 'old') displayData.reverse();
+            else if (e.target.value === 'fav') displayData = allData.filter(img => favorites.includes(img.id));
             render(displayData);
         };
     </script>
