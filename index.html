@@ -33,6 +33,7 @@
             --text: #0f172a; 
             --border: rgba(255, 255, 255, 0.4); 
             --blue: #2563eb; 
+            --dynamic-hue: 210deg; /* For Dynamic Background */
         }
         [data-theme="dark"] { 
             --bg: #020617; 
@@ -47,21 +48,22 @@
             background-color: var(--bg); 
             color: var(--text); 
             margin: 0; 
-            transition: 0.5s ease; 
+            transition: background 0.3s ease; 
             overflow-x: hidden; 
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--bg) 0%, #dbeafe 100%);
+            /* Feature 5: Dynamic Background Initial State */
+            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 30%, 90%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 40%, 95%) 100%);
             background-attachment: fixed;
         }
 
         [data-theme="dark"] body {
-            background: linear-gradient(135deg, #020617 0%, #1e1b4b 100%);
+            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 80%, 5%) 0%, hsl(calc(var(--dynamic-hue) + 30deg), 70%, 10%) 100%);
         }
         
         #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
 
-        .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 1001; }
-        #theme-btn { 
+        .top-nav { position: fixed; top: 20px; right: 20px; z-index: 1001; display: flex; gap: 10px; }
+        .nav-btn { 
             background: var(--glass); 
             backdrop-filter: blur(15px); 
             -webkit-backdrop-filter: blur(15px);
@@ -102,9 +104,14 @@
         .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
         .fav-btn.active { color: #ff4757; background: white; }
         
+        /* Feature 3: Progressive Blur Loading */
         .img-box { width: 100%; height: 380px; position: relative; overflow: hidden; cursor: zoom-in; background: rgba(255,255,255,0.05); }
-        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; opacity: 0; }
-        .card img.loaded { opacity: 1; }
+        .card img { 
+            width: 100%; height: 100%; object-fit: cover; 
+            transition: opacity 1s ease-in-out, filter 1s ease-in-out; 
+            opacity: 0; filter: blur(20px); 
+        }
+        .card img.loaded { opacity: 1; filter: blur(0); }
         
         .info { padding: 20px; display: flex; gap: 10px; position: relative; background: rgba(255,255,255,0.05); }
         
@@ -131,33 +138,18 @@
 
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 2px; }
         
-        /* Footer Styling */
-        footer { 
-            text-align: center; 
-            padding: 50px 20px; 
-            font-size: 13px; 
-            font-weight: 500;
-            color: var(--text);
-            opacity: 0.8;
-            letter-spacing: 0.5px;
-        }
-        footer a {
-            color: var(--blue);
-            text-decoration: none;
-            font-weight: 700;
-            margin-left: 5px;
-            transition: 0.3s;
-        }
-        footer a:hover {
-            text-decoration: underline;
-            opacity: 1;
-        }
+        footer { text-align: center; padding: 50px 20px; font-size: 13px; font-weight: 500; color: var(--text); opacity: 0.8; letter-spacing: 0.5px; }
+        footer a { color: var(--blue); text-decoration: none; font-weight: 700; margin-left: 5px; transition: 0.3s; }
     </style>
 </head>
 <body>
 
     <div id="tsparticles"></div>
-    <div class="theme-switch"><button id="theme-btn">🌙</button></div>
+    
+    <div class="top-nav">
+        <button class="nav-btn" id="random-btn" title="Surprise Me!">🎲</button>
+        <button class="nav-btn" id="theme-btn">🌙</button>
+    </div>
 
     <header>
         <h1>Scrape<span>X</span></h1>
@@ -192,14 +184,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
-        // PWA & Service Worker
+        // PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
             });
         }
 
-        // Liquid Particles
+        // Feature 5: Dynamic Background Color on Scroll
+        window.addEventListener('scroll', () => {
+            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            const hue = 210 + (scrollPercent * 100); // Blue to Purple shift
+            document.documentElement.style.setProperty('--dynamic-hue', hue + 'deg');
+        });
+
+        // Particles
         tsParticles.load("tsparticles", {
             particles: {
                 number: { value: 20, density: { enable: true, value_area: 800 } },
@@ -222,6 +221,14 @@
             themeBtn.innerText = isDark ? '🌙' : '☀️';
         };
 
+        // Feature 4: Random Wallpaper Logic
+        document.getElementById('random-btn').onclick = () => {
+            if (allData.length > 0) {
+                const randomImg = allData[Math.floor(Math.random() * allData.length)];
+                openPreview(`https://drive.google.com/thumbnail?id=${randomImg.id}&sz=w1000`);
+            }
+        };
+
         function render(data) {
             const gallery = document.getElementById('gallery');
             gallery.innerHTML = data.length ? '' : '<p style="text-align:center;width:100%;padding:50px;opacity:0.5;">No wallpapers found!</p>';
@@ -231,21 +238,20 @@
                 card.className = 'card';
                 const thumb = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1000`;
                 const full = `https://drive.google.com/uc?export=download&id=${img.id}`;
-                const standard = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1920`;
                 
                 card.innerHTML = `
                     <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
                         ${favorites.includes(img.id) ? '❤️' : '♡'}
                     </button>
                     <div class="img-box" onclick="openPreview('${thumb}')">
-                        <img src="${thumb}" onload="this.classList.add('loaded')" alt="Wallpaper ${img.id}">
+                        <img src="${thumb}" class="progressive-img" onload="this.classList.add('loaded')" alt="Wallpaper">
                     </div>
                     <div class="info">
                         <div class="dl-container">
                             <button class="download-btn" onclick="toggleDlMenu('${img.id}')">DOWNLOAD ▾</button>
                             <div class="dl-menu" id="menu-${img.id}">
                                 <a href="${full}" target="_blank" class="dl-item">Ultra HD <span>4K</span></a>
-                                <a href="${standard}" target="_blank" class="dl-item">Balanced <span>1080p</span></a>
+                                <a href="https://drive.google.com/thumbnail?id=${img.id}&sz=w1920" target="_blank" class="dl-item">Balanced <span>1080p</span></a>
                             </div>
                         </div>
                         <button class="copy-btn" onclick="navigator.clipboard.writeText('${full}').then(()=>alert('Link Copied!'))">COPY</button>
@@ -286,6 +292,7 @@
         }
 
         document.getElementById('close-modal').onclick = () => document.getElementById('preview-modal').style.display = 'none';
+        
         window.onclick = (e) => {
             if (!e.target.matches('.download-btn')) document.querySelectorAll('.dl-menu').forEach(m => m.classList.remove('active'));
             if (e.target == document.getElementById('preview-modal')) document.getElementById('preview-modal').style.display = 'none';
