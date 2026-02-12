@@ -29,15 +29,15 @@
     <style>
         :root { 
             --bg: #f0f4f8; 
-            --glass: rgba(255, 255, 255, 0.22); /* Intensity Increased */
+            --glass: rgba(255, 255, 255, 0.25); 
             --text: #0f172a; 
-            --border: rgba(255, 255, 255, 0.6); /* Sharper border */
+            --border: rgba(255, 255, 255, 0.7); 
             --blue: #2563eb; 
             --dynamic-hue: 210deg;
         }
         [data-theme="dark"] { 
             --bg: #020617; 
-            --glass: rgba(15, 23, 42, 0.45); /* Deep glass in dark mode */
+            --glass: rgba(15, 23, 42, 0.5); 
             --text: #f8fafc; 
             --border: rgba(255, 255, 255, 0.15); 
             --blue: #3b82f6; 
@@ -51,12 +51,12 @@
             transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
             overflow-x: hidden; 
             min-height: 100vh;
-            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 30%, 90%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 40%, 95%) 100%);
+            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 30%, 92%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 40%, 96%) 100%);
             background-attachment: fixed;
         }
 
         [data-theme="dark"] body {
-            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 80%, 5%) 0%, hsl(calc(var(--dynamic-hue) + 30deg), 70%, 10%) 100%);
+            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 80%, 4%) 0%, hsl(calc(var(--dynamic-hue) + 30deg), 70%, 8%) 100%);
         }
         
         #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
@@ -65,18 +65,18 @@
         
         .nav-btn { 
             background: var(--glass); 
-            backdrop-filter: blur(30px) saturate(180%); /* Stronger blur */
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            backdrop-filter: blur(30px) saturate(200%); 
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
             border: 1px solid var(--border); 
             cursor: pointer; width: 48px; height: 48px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; font-size: 1.3rem; 
             transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--text); 
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 0 10px rgba(255,255,255,0.2); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1), inset 0 0 15px rgba(255,255,255,0.2); 
         }
         .nav-btn:active { transform: scale(0.9); }
         
         header { text-align: center; padding: 80px 20px 40px; position: relative; }
-        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; }
+        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; text-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         h1 span { color: var(--blue); }
         .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
         
@@ -84,75 +84,72 @@
         #sort-select { 
             background: var(--glass); color: var(--text); backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border); padding: 12px 15px; border-radius: 12px; 
-            font-weight: 600; cursor: pointer; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border); padding: 12px 15px; border-radius: 15px; 
+            font-weight: 600; cursor: pointer; outline: none; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
         
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 20px; max-width: 1400px; margin: 0 auto; }
         
         .card { 
             background: var(--glass) !important; 
-            backdrop-filter: blur(35px) saturate(210%) contrast(110%); /* Intense Glass */
-            -webkit-backdrop-filter: blur(35px) saturate(210%) contrast(110%);
-            border-radius: 32px; overflow: hidden; 
+            backdrop-filter: blur(40px) saturate(220%) contrast(110%); 
+            -webkit-backdrop-filter: blur(40px) saturate(220%) contrast(110%);
+            border-radius: 35px; overflow: hidden; 
             border: 1px solid var(--border) !important; 
             transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
             opacity: 0; transform: translateY(30px); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1), inset 0 0 15px rgba(255,255,255,0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12), inset 0 0 20px rgba(255,255,255,0.15);
             position: relative;
         }
         .card.show { opacity: 1; transform: translateY(0); }
-        .card:hover { transform: translateY(-12px); border-color: rgba(255,255,255,0.9) !important; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+        .card:hover { transform: translateY(-15px); border-color: rgba(255,255,255,1) !important; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
         
-        .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.25); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
+        .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.3); border: none; color: white; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
         .fav-btn.active { color: #ff4757; background: white; }
         
-        .img-box { width: 100%; height: 400px; position: relative; overflow: hidden; cursor: zoom-in; background: rgba(255,255,255,0.05); }
-        .card img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease, filter 0.8s ease, transform 0.6s ease; opacity: 0; filter: blur(20px); }
-        .card:hover img { transform: scale(1.05); }
+        .img-box { width: 100%; height: 420px; position: relative; overflow: hidden; cursor: zoom-in; }
+        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s ease; opacity: 0; filter: blur(20px); }
+        .card:hover img { transform: scale(1.08); }
         .card img.loaded { opacity: 1; filter: blur(0); }
         
-        .info { padding: 22px; display: flex; gap: 12px; position: relative; background: rgba(255,255,255,0.08); }
+        .info { padding: 25px; display: flex; gap: 12px; position: relative; background: rgba(255,255,255,0.1); border-top: 1px solid var(--border); }
         
         .dl-container { position: relative; flex: 2; }
-        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 14px; border-radius: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2); }
+        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); }
         
         .dl-menu { 
-            display: none; position: absolute; bottom: 120%; left: 0; width: 100%; 
-            background: var(--glass); backdrop-filter: blur(40px) saturate(180%); border: 1px solid var(--border); 
-            border-radius: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.25); z-index: 100; overflow: hidden;
+            display: none; position: absolute; bottom: 125%; left: 0; width: 100%; 
+            background: var(--glass); backdrop-filter: blur(40px) saturate(200%); border: 1px solid var(--border); 
+            border-radius: 25px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); z-index: 100; overflow: hidden;
         }
-        .dl-menu.active { display: block; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .dl-menu.active { display: block; animation: glassSlide 0.4s ease; }
+        @keyframes glassSlide { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .dl-item { padding: 16px; font-size: 0.88rem; font-weight: 700; color: var(--text); text-decoration: none; display: flex; justify-content: space-between; transition: 0.2s; }
+        .dl-item { padding: 18px; font-size: 0.9rem; font-weight: 700; color: var(--text); text-decoration: none; display: flex; justify-content: space-between; transition: 0.2s; }
         .dl-item:hover { background: var(--blue); color: white; }
 
-        .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 18px; cursor: pointer; font-weight: 600; backdrop-filter: blur(15px); transition: 0.3s; }
-        .copy-btn:hover { background: rgba(255,255,255,0.3); }
+        .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 20px; cursor: pointer; font-weight: 600; backdrop-filter: blur(15px); transition: 0.3s; }
 
-        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(45px) saturate(160%); flex-direction: column; padding: 20px; }
-        .phone-frame { width: 280px; height: 580px; border: 12px solid #111; border-radius: 50px; position: relative; overflow: hidden; box-shadow: 0 0 80px rgba(0,0,0,0.6); background: #000; }
+        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(50px) saturate(180%); flex-direction: column; padding: 20px; }
+        .phone-frame { width: 280px; height: 580px; border: 14px solid #1a1a1a; border-radius: 55px; position: relative; overflow: hidden; box-shadow: 0 0 100px rgba(0,0,0,0.7); background: #000; }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
-        .phone-time { position: absolute; top: 45px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 200; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; opacity: 0.7; transition: 0.3s; }
-        #close-modal:hover { opacity: 1; transform: rotate(90deg); }
+        .phone-time { position: absolute; top: 45px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 200; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 45px; color: white; cursor: pointer; z-index: 10001; transition: 0.3s; }
+        #close-modal:hover { transform: scale(1.2) rotate(90deg); }
 
         .modal-actions { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 300px; }
-        .modal-dl-btn { background: var(--blue); color: white; text-decoration: none; padding: 15px 35px; border-radius: 22px; font-weight: 700; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4); transition: 0.3s; }
-        .modal-dl-btn:active { transform: scale(0.95); }
-        .modal-dl-secondary { background: rgba(255,255,255,0.15); color: white; text-decoration: none; padding: 12px 25px; border-radius: 20px; font-size: 0.9rem; width: 85%; text-align: center; border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(10px); }
+        .modal-dl-btn { background: var(--blue); color: white; text-decoration: none; padding: 16px 35px; border-radius: 25px; font-weight: 800; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4); transition: 0.3s; }
+        .modal-dl-secondary { background: rgba(255,255,255,0.15); color: white; text-decoration: none; padding: 12px 25px; border-radius: 20px; font-size: 0.9rem; width: 85%; text-align: center; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
 
-        #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 3px; font-size: 1.2rem; }
+        #loader { text-align: center; padding: 120px; font-weight: 800; color: var(--blue); letter-spacing: 4px; font-size: 1.3rem; }
         
-        footer { text-align: center; padding: 60px 20px; font-size: 13px; font-weight: 600; color: var(--text); opacity: 0.7; letter-spacing: 1px; }
-        footer a { color: var(--blue); text-decoration: none; font-weight: 700; margin-left: 8px; }
+        footer { text-align: center; padding: 60px 20px; font-size: 13px; font-weight: 600; color: var(--text); opacity: 0.7; letter-spacing: 1px; border-top: 1px solid var(--border); }
+        footer a { color: var(--blue); text-decoration: none; font-weight: 700; margin-left: 10px; }
 
         @media (max-width: 600px) {
             h1 { font-size: 2.8rem; }
-            .phone-frame { width: 250px; height: 520px; }
-            .gallery { gap: 20px; padding: 15px; }
-            .top-nav { top: 15px; right: 15px; }
+            .phone-frame { width: 260px; height: 530px; }
+            .gallery { gap: 25px; padding: 15px; }
         }
     </style>
 </head>
@@ -201,30 +198,56 @@
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
-        // PWA
+        // PWA registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
             });
         }
 
-        // Dynamic Background
+        // Scroll Dynamic Hue
         window.addEventListener('scroll', () => {
             const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
             const hue = 210 + (scrollPercent * 80); 
             document.documentElement.style.setProperty('--dynamic-hue', hue + 'deg');
         });
 
-        // Particles with increased size for better Liquid vibe
+        // Advanced Liquid Bubble Effect
         tsParticles.load("tsparticles", {
             particles: {
-                number: { value: 20, density: { enable: true, value_area: 800 } },
-                color: { value: ["#2563eb", "#60a5fa", "#3b82f6"] },
+                number: { value: 12, density: { enable: true, value_area: 800 } },
+                color: { value: ["#2563eb", "#60a5fa", "#a855f7", "#ec4899"] },
                 shape: { type: "circle" },
-                opacity: { value: 0.2 },
-                size: { value: { min: 40, max: 100 } },
-                move: { enable: true, speed: 0.5, direction: "none", outModes: "out" },
-            }
+                opacity: { 
+                    value: 0.4, 
+                    random: true,
+                    anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+                },
+                size: { 
+                    value: { min: 60, max: 130 }, 
+                    random: true,
+                    anim: { enable: true, speed: 2, size_min: 40, sync: false }
+                },
+                move: { 
+                    enable: true, 
+                    speed: 1.2, 
+                    direction: "none", 
+                    random: true, 
+                    outModes: { default: "out" },
+                    attract: { enable: true, rotateX: 600, rotateY: 1200 }
+                },
+            },
+            interactivity: {
+                detectsOn: "canvas",
+                events: {
+                    onHover: { enable: true, mode: "bubble" },
+                    resize: true
+                },
+                modes: {
+                    bubble: { distance: 250, size: 160, duration: 2, opacity: 0.5 }
+                }
+            },
+            retina_detect: true
         });
 
         const script_url = 'https://script.google.com/macros/s/AKfycbwNwvh0AEvhLJhLQV-gmCnQxOSI4o2zu4T91bDVpDY_41wWwhn-uHgQ2hbbWUm2mNdz5A/exec';
@@ -239,10 +262,9 @@
             localStorage.setItem('scrapex-theme', isDark ? 'light' : 'dark');
         };
 
-        const savedTheme = localStorage.getItem('scrapex-theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            themeBtn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+        if (localStorage.getItem('scrapex-theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeBtn.innerText = '☀️';
         }
 
         document.getElementById('random-btn').onclick = () => {
@@ -289,7 +311,7 @@
         }
 
         function copyLink(link) {
-            navigator.clipboard.writeText(link).then(() => alert('Premium Link Copied!'));
+            navigator.clipboard.writeText(link).then(() => alert('Link Copied!'));
         }
 
         function toggleDlMenu(id) {
