@@ -6,80 +6,113 @@
     <meta name="theme-color" content="#2563eb">
     
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1041/1041883.png">
+    <link rel="apple-touch-icon" href="./Logo.png">
 
-    <title>ScrapeX Wallpapers | Premium 4K Collection</title>
+    <title>ScrapeX Wallpapers | Liquid Glass Edition</title>
     
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@2.12.0/tsparticles.preset.links.bundle.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --border: #e2e8f0; --blue: #2563eb; --shimmer: #e2e8f0; }
-        [data-theme="dark"] { --bg: #0b0f1a; --card: #161b22; --text: #f8fafc; --border: #30363d; --blue: #3b82f6; --shimmer: #1c2128; }
+        :root { 
+            --bg: #e2e8f0; 
+            --glass: rgba(255, 255, 255, 0.45); 
+            --text: #0f172a; 
+            --border: rgba(255, 255, 255, 0.6); 
+            --blue: #2563eb; 
+            --shimmer: rgba(255, 255, 255, 0.2); 
+        }
+        [data-theme="dark"] { 
+            --bg: #030712; 
+            --glass: rgba(17, 24, 39, 0.6); 
+            --text: #f8fafc; 
+            --border: rgba(255, 255, 255, 0.1); 
+            --blue: #3b82f6; 
+            --shimmer: rgba(255, 255, 255, 0.05); 
+        }
         
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; transition: 0.5s ease; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; transition: 0.5s ease; overflow-x: hidden; min-height: 100vh; }
+        
+        /* Background Liquid Blobs */
         #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
-        
+
         .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 1001; }
-        #theme-btn { background: var(--card); border: 1px solid var(--border); cursor: pointer; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; color: var(--text); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        #theme-btn { 
+            background: var(--glass); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid var(--border); 
+            cursor: pointer; width: 45px; height: 45px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; 
+            transition: 0.3s; color: var(--text); box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        }
         
-        header { text-align: center; padding: 60px 20px; border-bottom: 1px solid var(--border); position: relative; }
-        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; }
-        h1 span { color: var(--blue); }
+        header { text-align: center; padding: 60px 20px; position: relative; }
+        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; }
+        h1 span { color: var(--blue); text-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
         .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
-        #greeting { margin-top: 15px; opacity: 0.8; }
+        #greeting { margin-top: 15px; opacity: 0.8; font-weight: 500; }
         
-        .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; position: relative; }
-        #sort-select { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 12px 15px; border-radius: 12px; font-weight: 600; cursor: pointer; outline: none; }
+        .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; }
+        #sort-select { 
+            background: var(--glass); color: var(--text); backdrop-filter: blur(15px);
+            border: 1px solid var(--border); padding: 12px 15px; border-radius: 12px; 
+            font-weight: 600; cursor: pointer; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
         
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; position: relative; }
-        .card { background: var(--card); border-radius: 24px; overflow: hidden; border: 1px solid var(--border); transition: 0.4s; position: relative; opacity: 0; transform: translateY(20px); }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        
+        /* Liquid Glass Card */
+        .card { 
+            background: var(--glass); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px; overflow: hidden; 
+            border: 1px solid var(--border); 
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            opacity: 0; transform: translateY(30px); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
         .card.show { opacity: 1; transform: translateY(0); }
-        .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .card:hover { transform: translateY(-10px) scale(1.02); border-color: var(--blue); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         
-        .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.4); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; }
+        .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
         .fav-btn.active { color: #ff4757; background: white; box-shadow: 0 0 15px rgba(255, 71, 87, 0.4); }
         
-        .img-box { width: 100%; height: 350px; background: var(--shimmer); position: relative; overflow: hidden; cursor: zoom-in; }
-        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; opacity: 0; }
+        .img-box { width: 100%; height: 380px; background: var(--shimmer); position: relative; overflow: hidden; cursor: zoom-in; }
+        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; opacity: 0; }
         .card img.loaded { opacity: 1; }
         
-        .info { padding: 18px; display: flex; gap: 10px; position: relative; }
+        .info { padding: 20px; display: flex; gap: 10px; position: relative; }
         
-        /* NEW DOWNLOAD SYSTEM */
+        /* Glass Buttons */
         .dl-container { position: relative; flex: 2; }
-        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 14px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 13px; border-radius: 16px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
+        .download-btn:hover { filter: brightness(1.1); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4); }
         
         .dl-menu { 
-            display: none; position: absolute; bottom: 110%; left: 0; width: 100%; 
-            background: var(--card); border: 1px solid var(--border); border-radius: 12px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15); z-index: 100; overflow: hidden;
+            display: none; position: absolute; bottom: 115%; left: 0; width: 100%; 
+            background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); 
+            border-radius: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); z-index: 100; overflow: hidden;
         }
-        .dl-menu.active { display: block; animation: popUp 0.3s ease; }
-        @keyframes popUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .dl-menu.active { display: block; animation: glassPop 0.4s ease; }
+        @keyframes glassPop { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .dl-item { 
-            padding: 12px; font-size: 0.8rem; font-weight: 600; color: var(--text); 
-            text-decoration: none; display: flex; justify-content: space-between; transition: 0.2s;
-        }
+        .dl-item { padding: 14px; font-size: 0.85rem; font-weight: 600; color: var(--text); text-decoration: none; display: flex; justify-content: space-between; transition: 0.2s; }
         .dl-item:hover { background: var(--blue); color: white; }
-        .dl-item span { opacity: 0.6; font-size: 0.7rem; }
-        .dl-item:hover span { opacity: 1; }
 
-        .copy-btn { flex: 1; background: var(--border); color: var(--text); border: none; padding: 12px; border-radius: 14px; cursor: pointer; font-weight: 600; }
+        .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 16px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .copy-btn:hover { background: var(--border); }
 
-        /* LIVE PREVIEW MODAL STYLES */
-        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(12px); flex-direction: column; }
-        .phone-frame { width: 280px; height: 580px; border: 8px solid #111; border-radius: 40px; position: relative; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.5), 0 0 0 2px #333; background: #000; }
-        .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 25px; background: #111; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; z-index: 10; }
+        /* Preview Modal Glass */
+        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(15px); flex-direction: column; }
+        .phone-frame { width: 280px; height: 580px; border: 10px solid #111; border-radius: 45px; position: relative; overflow: hidden; box-shadow: 0 0 60px rgba(0,0,0,0.5); background: #000; }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
-        .phone-time { position: absolute; top: 40px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 300; z-index: 5; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .phone-date { position: absolute; top: 100px; width: 100%; text-align: center; color: white; font-size: 1rem; z-index: 5; }
-        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 35px; color: white; cursor: pointer; opacity: 0.7; }
+        .phone-time { position: absolute; top: 45px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 200; z-index: 5; }
+        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer; opacity: 0.6; }
 
-        #loader { text-align: center; padding: 100px; font-weight: bold; color: var(--blue); }
-        footer { text-align: center; padding: 30px; opacity: 0.6; font-size: 13px; position: relative; }
+        #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 2px; }
+        footer { text-align: center; padding: 40px; opacity: 0.5; font-size: 12px; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -90,14 +123,14 @@
     <header>
         <h1>Scrape<span>X</span></h1>
         <div class="creator">CREATED BY ASISH</div>
-        <p id="greeting">Connecting to Server...</p>
+        <p id="greeting">Loading Liquid Interface...</p>
     </header>
 
     <div class="controls">
         <select id="sort-select">
             <option value="new">Newest First</option>
             <option value="old">Oldest First</option>
-            <option value="fav">❤️ My Favorites</option> 
+            <option value="fav">❤️ Favorites</option> 
         </select>
     </div>
 
@@ -107,36 +140,34 @@
     <div id="preview-modal">
         <span id="close-modal">&times;</span>
         <div class="phone-frame">
-            <div class="phone-notch"></div>
             <div class="phone-time" id="phone-time">12:00</div>
-            <div class="phone-date" id="phone-date">Thursday, Feb 12</div>
             <img id="modal-img" src="">
         </div>
-        <p style="color: white; margin-top: 20px; font-weight: 600; opacity: 0.8;">Live Preview</p>
+        <p style="color: white; margin-top: 25px; font-weight: 500; letter-spacing: 1px;">PREVIEW MODE</p>
     </div>
 
-    <footer>© 2026 ScrapeX | All Rights Reserved</footer>
+    <footer>© 2026 SCRAPEX | PREMIUM 4K COLLECTION</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
-        // PWA Registration
+        // PWA Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
             });
         }
 
-        // Particle Config
+        // Liquid Particles Config
         tsParticles.load("tsparticles", {
-            fpsLimit: 60,
             particles: {
-                number: { value: 40, density: { enable: true, value_area: 800 } },
+                number: { value: 25, density: { enable: true, value_area: 800 } },
                 color: { value: "#2563eb" },
-                links: { enable: true, distance: 150, color: "#2563eb", opacity: 0.2 },
-                move: { enable: true, speed: 1.5 },
-                size: { value: 2 }
-            },
-            interactivity: { events: { onhover: { enable: true, mode: "grab" } } }
+                shape: { type: "circle" },
+                opacity: { value: 0.2, random: true },
+                size: { value: { min: 10, max: 40 }, random: true },
+                move: { enable: true, speed: 0.8, direction: "none", outModes: "out" },
+                blur: 5
+            }
         });
 
         const script_url = 'https://script.google.com/macros/s/AKfycbwNwvh0AEvhLJhLQV-gmCnQxOSI4o2zu4T91bDVpDY_41wWwhn-uHgQ2hbbWUm2mNdz5A/exec';
@@ -148,24 +179,27 @@
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
             themeBtn.innerText = isDark ? '🌙' : '☀️';
+            // Update particles color based on theme
+            tsParticles.domItem(0).options.particles.color.value = isDark ? "#2563eb" : "#3b82f6";
+            tsParticles.domItem(0).refresh();
         };
 
         function toggleDlMenu(id) {
-            const menus = document.querySelectorAll('.dl-menu');
-            menus.forEach(m => { if(m.id !== `menu-${id}`) m.classList.remove('active') });
-            document.getElementById(`menu-${id}`).classList.toggle('active');
+            const menu = document.getElementById(`menu-${id}`);
+            document.querySelectorAll('.dl-menu').forEach(m => { if(m !== menu) m.classList.remove('active') });
+            menu.classList.toggle('active');
         }
 
         function render(data) {
             const gallery = document.getElementById('gallery');
-            gallery.innerHTML = data.length ? '' : '<p style="text-align:center;width:100%;padding:50px;">No wallpapers found!</p>';
+            gallery.innerHTML = data.length ? '' : '<p style="text-align:center;width:100%;padding:50px;opacity:0.5;">No wallpapers found!</p>';
             
             data.forEach((img, i) => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 const thumb = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1000`;
                 const full = `https://drive.google.com/uc?export=download&id=${img.id}`;
-                const standard = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1920`; // 1080p approx
+                const standard = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1920`;
                 
                 card.innerHTML = `
                     <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
@@ -178,14 +212,14 @@
                         <div class="dl-container">
                             <button class="download-btn" onclick="toggleDlMenu('${img.id}')">DOWNLOAD ▾</button>
                             <div class="dl-menu" id="menu-${img.id}">
-                                <a href="${full}" target="_blank" class="dl-item">Original Quality <span>4K</span></a>
-                                <a href="${standard}" target="_blank" class="dl-item">Standard Quality <span>1080p</span></a>
+                                <a href="${full}" target="_blank" class="dl-item">Ultra HD <span>4K</span></a>
+                                <a href="${standard}" target="_blank" class="dl-item">Balanced <span>1080p</span></a>
                             </div>
                         </div>
                         <button class="copy-btn" onclick="navigator.clipboard.writeText('${full}').then(()=>alert('Link Copied!'))">COPY</button>
                     </div>`;
                 gallery.appendChild(card);
-                setTimeout(() => card.classList.add('show'), i * 80);
+                setTimeout(() => card.classList.add('show'), i * 60);
             });
         }
 
@@ -201,7 +235,8 @@
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
                 allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
-                document.getElementById('greeting').innerText = new Date().getHours() < 12 ? "🌅 Good Morning!" : (new Date().getHours() < 18 ? "☀️ Good Afternoon!" : "🌙 Good Evening!");
+                const hr = new Date().getHours();
+                document.getElementById('greeting').innerText = hr < 12 ? "🌅 Good Morning" : (hr < 18 ? "☀️ Good Afternoon" : "🌙 Good Evening");
                 render(allData);
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
@@ -212,16 +247,12 @@
             document.getElementById('preview-modal').style.display = 'flex'; 
             const now = new Date();
             document.getElementById('phone-time').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('phone-date').innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
         }
 
         document.getElementById('close-modal').onclick = () => document.getElementById('preview-modal').style.display = 'none';
         
-        // Close menu when clicking outside
         window.onclick = (e) => {
-            if (!e.target.matches('.download-btn')) {
-                document.querySelectorAll('.dl-menu').forEach(m => m.classList.remove('active'));
-            }
+            if (!e.target.matches('.download-btn')) document.querySelectorAll('.dl-menu').forEach(m => m.classList.remove('active'));
             if (e.target == document.getElementById('preview-modal')) document.getElementById('preview-modal').style.display = 'none';
         };
 
