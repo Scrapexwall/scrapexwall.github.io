@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <meta name="google-site-verification" content="googlecc74590bdad7369b" />
-    
     <title>ScrapeX Wallpapers | Premium 4K Collection</title>
-    <meta name="description" content="Download high-quality 4K premium wallpapers from ScrapeX Pro Engine. The best wallpaper collection curated by Asish.">
-    <meta name="keywords" content="ScrapeX, ScrapeX Wallpapers, 4K Wallpapers, Premium Wallpapers, Asish, Wallpaper Engine">
-    <meta name="author" content="Asish">
+    
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@2.12.0/tsparticles.preset.links.bundle.min.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -20,23 +18,31 @@
             --bg: #0b0f1a; --card: #161b22; --text: #f8fafc; --border: #30363d; --blue: #3b82f6; --shimmer: #1c2128;
         }
 
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; transition: 0.5s ease; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; transition: 0.5s ease; overflow-x: hidden; }
+
+        /* Particle Container */
+        #tsparticles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1; /* Background-e thakar jonno */
+        }
 
         .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 1001; }
         #theme-btn { background: var(--card); border: 1px solid var(--border); cursor: pointer; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; color: var(--text); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* Header ekhon aro clean: top padding 40px kora hoyeche */
-        header { text-align: center; padding: 40px 20px; border-bottom: 1px solid var(--border); }
-        
-        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; line-height: 1; }
+        header { text-align: center; padding: 60px 20px; border-bottom: 1px solid var(--border); position: relative; }
+        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; }
         h1 span { color: var(--blue); }
-        .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 10px; text-transform: uppercase; }
-        #greeting { margin-top: 15px; opacity: 0.8; font-weight: 500; }
+        .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
+        #greeting { margin-top: 15px; opacity: 0.8; }
 
-        .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; }
+        .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; position: relative; }
         #sort-select { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 12px 15px; border-radius: 12px; font-weight: 600; cursor: pointer; outline: none; }
 
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; position: relative; }
         .card { background: var(--card); border-radius: 24px; overflow: hidden; border: 1px solid var(--border); transition: 0.4s; position: relative; opacity: 0; transform: translateY(20px); }
         .card.show { opacity: 1; transform: translateY(0); }
         .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
@@ -60,17 +66,19 @@
         #close-modal { position: absolute; top: 30px; right: 30px; font-size: 35px; color: white; cursor: pointer; }
 
         #loader { text-align: center; padding: 100px; font-weight: bold; color: var(--blue); }
-        footer { text-align: center; padding: 30px; opacity: 0.6; font-size: 13px; }
+        footer { text-align: center; padding: 30px; opacity: 0.6; font-size: 13px; position: relative; }
     </style>
 </head>
 <body>
+
+    <div id="tsparticles"></div>
 
     <div class="theme-switch"><button id="theme-btn">🌙</button></div>
 
     <header>
         <h1>Scrape<span>X</span></h1>
         <div class="creator">CREATED BY ASISH</div>
-        <p id="greeting">Connecting to Database...</p>
+        <p id="greeting">Connecting to Server...</p>
     </header>
 
     <div class="controls">
@@ -91,7 +99,49 @@
 
     <footer>© 2026 ScrapeX | All Rights Reserved</footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
+        // Particle Configuration
+        tsParticles.load("tsparticles", {
+            fpsLimit: 60,
+            particles: {
+                number: { value: 50, density: { enable: true, value_area: 800 } },
+                color: { value: "#2563eb" },
+                shape: { type: "circle" },
+                opacity: { value: 0.3, random: true },
+                size: { value: 3, random: true },
+                move: {
+                    enable: true,
+                    speed: 1.5,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#2563eb",
+                    opacity: 0.2,
+                    width: 1
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "grab" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                },
+                modes: {
+                    grab: { distance: 200, line_linked: { opacity: 0.5 } },
+                    push: { particles_nb: 4 }
+                }
+            },
+            retina_detect: true
+        });
+
         const script_url = 'https://script.google.com/macros/s/AKfycbwNwvh0AEvhLJhLQV-gmCnQxOSI4o2zu4T91bDVpDY_41wWwhn-uHgQ2hbbWUm2mNdz5A/exec';
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
@@ -99,8 +149,15 @@
         const themeBtn = document.getElementById('theme-btn');
         themeBtn.onclick = () => {
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
             themeBtn.innerText = isDark ? '🌙' : '☀️';
+            
+            // Particles color change on theme switch
+            const pColor = newTheme === 'dark' ? '#3b82f6' : '#2563eb';
+            tsParticles.domItem(0).options.particles.color.value = pColor;
+            tsParticles.domItem(0).options.particles.line_linked.color = pColor;
+            tsParticles.domItem(0).refresh();
         };
 
         function toggleFav(id, btn) {
@@ -173,3 +230,4 @@
     </script>
 </body>
 </html>
+
