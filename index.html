@@ -122,7 +122,35 @@
         #close-modal { position: absolute; top: 20px; right: 20px; font-size: 40px; color: white; cursor: pointer; }
 
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 2px; }
-        footer { text-align: center; padding: 50px 20px; font-size: 12px; opacity: 0.6; }
+        
+        /* Updated Footer Style */
+        footer { 
+            text-align: center; 
+            padding: 60px 20px; 
+            font-size: 13px; 
+        }
+        .footer-content {
+            opacity: 0.7;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            border-bottom: 1px solid transparent;
+        }
+        .footer-links a:hover {
+            color: var(--blue);
+            border-bottom: 1px solid var(--blue);
+        }
 
         @media (max-width: 600px) {
             h1 { font-size: 2.5rem; }
@@ -167,7 +195,15 @@
         </div>
     </div>
 
-    <footer>© 2026 SCRAPEX | ASISH | <a href="sitemap.xml" target="_blank" style="color:inherit; text-decoration:none;">Sitemap</a></footer>
+    <footer>
+        <div class="footer-content">
+            <div style="font-weight: 800; letter-spacing: 1px;">© 2026 SCRAPEX | ASISH</div>
+            <div class="footer-links">
+                <a href="sitemap.xml" target="_blank">Sitemap</a>
+                <a href="https://github.com/scrapexwall" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
