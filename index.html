@@ -8,7 +8,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="./Logo.png">
 
-    <title>ScrapeX Wallpapers | Liquid Glass Edition</title>
+    <title>ScrapeX Wallpapers | Real Liquid Glass</title>
     
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@2.12.0/tsparticles.preset.links.bundle.min.js"></script>
@@ -16,31 +16,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --bg: #e2e8f0; 
-            --glass: rgba(255, 255, 255, 0.45); 
+            --bg: #f0f4f8; 
+            /* কার্ডের স্বচ্ছতা কমিয়ে ০.১৫ করা হয়েছে যাতে পেছনের পার্টিকেল দেখা যায় */
+            --glass: rgba(255, 255, 255, 0.15); 
             --text: #0f172a; 
-            --border: rgba(255, 255, 255, 0.6); 
+            --border: rgba(255, 255, 255, 0.4); 
             --blue: #2563eb; 
-            --shimmer: rgba(255, 255, 255, 0.2); 
         }
         [data-theme="dark"] { 
-            --bg: #030712; 
-            --glass: rgba(17, 24, 39, 0.6); 
+            --bg: #020617; 
+            --glass: rgba(15, 23, 42, 0.2); 
             --text: #f8fafc; 
             --border: rgba(255, 255, 255, 0.1); 
             --blue: #3b82f6; 
-            --shimmer: rgba(255, 255, 255, 0.05); 
         }
         
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; transition: 0.5s ease; overflow-x: hidden; min-height: 100vh; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            transition: 0.5s ease; 
+            overflow-x: hidden; 
+            min-height: 100vh;
+            /* হালকা গ্রাডিয়েন্ট যোগ করা হয়েছে গ্লাস এফেক্ট ফুটিয়ে তুলতে */
+            background: linear-gradient(135deg, var(--bg) 0%, #dbeafe 100%);
+            background-attachment: fixed;
+        }
+
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #020617 0%, #1e1b4b 100%);
+        }
         
-        /* Background Liquid Blobs */
         #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
 
         .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 1001; }
         #theme-btn { 
             background: var(--glass); 
-            backdrop-filter: blur(10px); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--border); 
             cursor: pointer; width: 45px; height: 45px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; font-size: 1.2rem; 
@@ -49,70 +63,66 @@
         
         header { text-align: center; padding: 60px 20px; position: relative; }
         h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; }
-        h1 span { color: var(--blue); text-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
+        h1 span { color: var(--blue); }
         .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
         #greeting { margin-top: 15px; opacity: 0.8; font-weight: 500; }
         
         .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; }
         #sort-select { 
-            background: var(--glass); color: var(--text); backdrop-filter: blur(15px);
+            background: var(--glass); color: var(--text); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border); padding: 12px 15px; border-radius: 12px; 
-            font-weight: 600; cursor: pointer; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            font-weight: 600; cursor: pointer; outline: none;
         }
         
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; }
         
-        /* Liquid Glass Card */
+        /* REAL LIQUID GLASS CARD */
         .card { 
-            background: var(--glass); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 28px; overflow: hidden; 
-            border: 1px solid var(--border); 
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            background: var(--glass) !important; 
+            backdrop-filter: blur(16px) saturate(180%); 
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 32px; overflow: hidden; 
+            border: 1px solid var(--border) !important; 
+            transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
             opacity: 0; transform: translateY(30px); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
         }
         .card.show { opacity: 1; transform: translateY(0); }
-        .card:hover { transform: translateY(-10px) scale(1.02); border-color: var(--blue); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.8) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
         
         .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
-        .fav-btn.active { color: #ff4757; background: white; box-shadow: 0 0 15px rgba(255, 71, 87, 0.4); }
+        .fav-btn.active { color: #ff4757; background: white; }
         
-        .img-box { width: 100%; height: 380px; background: var(--shimmer); position: relative; overflow: hidden; cursor: zoom-in; }
+        .img-box { width: 100%; height: 380px; position: relative; overflow: hidden; cursor: zoom-in; background: rgba(255,255,255,0.05); }
         .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; opacity: 0; }
         .card img.loaded { opacity: 1; }
         
-        .info { padding: 20px; display: flex; gap: 10px; position: relative; }
+        .info { padding: 20px; display: flex; gap: 10px; position: relative; background: rgba(255,255,255,0.05); }
         
-        /* Glass Buttons */
         .dl-container { position: relative; flex: 2; }
-        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 13px; border-radius: 16px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
-        .download-btn:hover { filter: brightness(1.1); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.4); }
+        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 13px; border-radius: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); }
         
         .dl-menu { 
             display: none; position: absolute; bottom: 115%; left: 0; width: 100%; 
-            background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); 
-            border-radius: 18px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); z-index: 100; overflow: hidden;
+            background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--border); 
+            border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); z-index: 100; overflow: hidden;
         }
-        .dl-menu.active { display: block; animation: glassPop 0.4s ease; }
-        @keyframes glassPop { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .dl-menu.active { display: block; }
 
         .dl-item { padding: 14px; font-size: 0.85rem; font-weight: 600; color: var(--text); text-decoration: none; display: flex; justify-content: space-between; transition: 0.2s; }
         .dl-item:hover { background: var(--blue); color: white; }
 
-        .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 16px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .copy-btn:hover { background: var(--border); }
+        .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 16px; cursor: pointer; font-weight: 600; backdrop-filter: blur(10px); }
 
-        /* Preview Modal Glass */
-        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(15px); flex-direction: column; }
+        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(20px); flex-direction: column; }
         .phone-frame { width: 280px; height: 580px; border: 10px solid #111; border-radius: 45px; position: relative; overflow: hidden; box-shadow: 0 0 60px rgba(0,0,0,0.5); background: #000; }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
-        .phone-time { position: absolute; top: 45px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 200; z-index: 5; }
-        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer; opacity: 0.6; }
+        .phone-time { position: absolute; top: 45px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 200; }
+        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer; }
 
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 2px; }
-        footer { text-align: center; padding: 40px; opacity: 0.5; font-size: 12px; font-weight: 600; }
+        footer { text-align: center; padding: 40px; opacity: 0.5; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -123,7 +133,7 @@
     <header>
         <h1>Scrape<span>X</span></h1>
         <div class="creator">CREATED BY ASISH</div>
-        <p id="greeting">Loading Liquid Interface...</p>
+        <p id="greeting">Connecting...</p>
     </header>
 
     <div class="controls">
@@ -150,23 +160,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
-        // PWA Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
-            });
-        }
-
-        // Liquid Particles Config
+        // Liquid Particles (বড় বব্বল করা হয়েছে যাতে গ্লাসের নিচে সুন্দর দেখায়)
         tsParticles.load("tsparticles", {
             particles: {
-                number: { value: 25, density: { enable: true, value_area: 800 } },
-                color: { value: "#2563eb" },
+                number: { value: 20, density: { enable: true, value_area: 800 } },
+                color: { value: ["#2563eb", "#60a5fa", "#3b82f6"] },
                 shape: { type: "circle" },
-                opacity: { value: 0.2, random: true },
-                size: { value: { min: 10, max: 40 }, random: true },
-                move: { enable: true, speed: 0.8, direction: "none", outModes: "out" },
-                blur: 5
+                opacity: { value: 0.4 },
+                size: { value: { min: 20, max: 60 } },
+                move: { enable: true, speed: 1, direction: "none", outModes: "out" },
             }
         });
 
@@ -179,16 +181,7 @@
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
             themeBtn.innerText = isDark ? '🌙' : '☀️';
-            // Update particles color based on theme
-            tsParticles.domItem(0).options.particles.color.value = isDark ? "#2563eb" : "#3b82f6";
-            tsParticles.domItem(0).refresh();
         };
-
-        function toggleDlMenu(id) {
-            const menu = document.getElementById(`menu-${id}`);
-            document.querySelectorAll('.dl-menu').forEach(m => { if(m !== menu) m.classList.remove('active') });
-            menu.classList.toggle('active');
-        }
 
         function render(data) {
             const gallery = document.getElementById('gallery');
@@ -223,6 +216,12 @@
             });
         }
 
+        function toggleDlMenu(id) {
+            const menu = document.getElementById(`menu-${id}`);
+            document.querySelectorAll('.dl-menu').forEach(m => { if(m !== menu) m.classList.remove('active') });
+            menu.classList.toggle('active');
+        }
+
         function toggleFav(id, btn) {
             const index = favorites.indexOf(id);
             if (index > -1) { favorites.splice(index, 1); btn.classList.remove('active'); btn.innerHTML = '♡'; }
@@ -235,8 +234,7 @@
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
                 allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
-                const hr = new Date().getHours();
-                document.getElementById('greeting').innerText = hr < 12 ? "🌅 Good Morning" : (hr < 18 ? "☀️ Good Afternoon" : "🌙 Good Evening");
+                document.getElementById('greeting').innerText = "Premium Wallpapers";
                 render(allData);
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
@@ -245,12 +243,10 @@
         function openPreview(url) { 
             document.getElementById('modal-img').src = url; 
             document.getElementById('preview-modal').style.display = 'flex'; 
-            const now = new Date();
-            document.getElementById('phone-time').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('phone-time').innerText = new Date().getHours().toString().padStart(2, '0') + ":" + new Date().getMinutes().toString().padStart(2, '0');
         }
 
         document.getElementById('close-modal').onclick = () => document.getElementById('preview-modal').style.display = 'none';
-        
         window.onclick = (e) => {
             if (!e.target.matches('.download-btn')) document.querySelectorAll('.dl-menu').forEach(m => m.classList.remove('active'));
             if (e.target == document.getElementById('preview-modal')) document.getElementById('preview-modal').style.display = 'none';
