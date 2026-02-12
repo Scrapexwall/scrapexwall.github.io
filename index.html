@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrapeX | Pro Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --border: #e2e8f0; --blue: #2563eb; --shimmer: #e2e8f0;
+        }
+        [data-theme="dark"] {
+            --bg: #0b0f1a; --card: #161b22; --text: #f8fafc; --border: #30363d; --blue: #3b82f6; --shimmer: #1c2128;
+        }
+
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; transition: 0.5s ease; }
+
+        /* ☀️ Theme Button */
+        .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 1001; }
+        #theme-btn { background: var(--card); border: 1px solid var(--border); cursor: pointer; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; color: var(--text); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        header { text-align: center; padding: 60px 20px; border-bottom: 1px solid var(--border); }
+        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; }
+        h1 span { color: var(--blue); }
+        .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
+        #greeting { margin-top: 15px; opacity: 0.8; }
+
+        /* 🔽 Controls */
+        .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; }
+        #sort-select { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 12px 15px; border-radius: 12px; font-weight: 600; cursor: pointer; outline: none; }
+
+        /* 🖼️ Gallery & Card */
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .card { background: var(--card); border-radius: 24px; overflow: hidden; border: 1px solid var(--border); transition: 0.4s; position: relative; opacity: 0; transform: translateY(20px); }
+        .card.show { opacity: 1; transform: translateY(0); }
+        .card:hover { transform: translateY(-10px); border-color: var(--blue); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+
+        /* ❤️ Favorite Button */
+        .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.4); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; }
+        .fav-btn.active { color: #ff4757; background: white; box-shadow: 0 0 15px rgba(255, 71, 87, 0.4); }
+
+        /* ✨ Shimmer Effect */
+        .img-box { width: 100%; height: 350px; background: var(--shimmer); position: relative; overflow: hidden; cursor: zoom-in; }
+        .shimmer-anim { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: loading 1.5s infinite; }
+        @keyframes loading { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; opacity: 0; }
+        .card img.loaded { opacity: 1; }
+
+        .info { padding: 18px; display: flex; gap: 10px; }
+        .download-btn { flex: 2; background: var(--blue); color: white; text-decoration: none; padding: 12px; border-radius: 14px; font-weight: 700; font-size: 0.85rem; text-align: center; }
+        .copy-btn { flex: 1; background: var(--border); color: var(--text); border: none; padding: 12px; border-radius: 14px; cursor: pointer; }
+
+        /* 🔎 Preview Modal */
+        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        #preview-modal img { max-width: 90%; max-height: 85%; border-radius: 10px; }
+        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 35px; color: white; cursor: pointer; }
+
+        #loader { text-align: center; padding: 100px; font-weight: bold; color: var(--blue); }
+        footer { text-align: center; padding: 30px; opacity: 0.6; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="theme-switch"><button id="theme-btn">🌙</button></div>
+
+    <header>
+        <h1>Scrape<span>X</span></h1>
+        <div class="creator">CREATED BY ASISH</div>
+        <p id="greeting">Connecting to Drive...</p>
+    </header>
+
+    <div class="controls">
+        <select id="sort-select">
+            <option value="new">Newest First</option>
+            <option value="old">Oldest First</option>
+            <option value="fav">❤️ My Favorites</option> </select>
+    </div>
+
+    <div id="loader">SYNCHRONIZING...</div>
+    <div class="gallery" id="gallery"></div>
+
+    <div id="preview-modal">
+        <span id="close-modal">&times;</span>
+        <img id="modal-img" src="">
+    </div>
+
+    <footer>© 2026 ScrapeX | All Rights Reserved</footer>
+
+    <script>
+        const script_url = 'https://script.google.com/macros/s/AKfycbwNwvh0AEvhLJhLQV-gmCnQxOSI4o2zu4T91bDVpDY_41wWwhn-uHgQ2hbbWUm2mNdz5A/exec';
+        let allData = [];
+        let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
+
+        // 1. Theme Logic
+        const themeBtn = document.getElementById('theme-btn');
+        themeBtn.onclick = () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            themeBtn.innerText = isDark ? '🌙' : '☀️';
+        };
+
+        // 2. Favorite Toggle
+        function toggleFav(id, btn) {
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                btn.classList.remove('active');
+                btn.innerHTML = '♡';
+            } else {
+                favorites.push(id);
+                btn.classList.add('active');
+                btn.innerHTML = '❤️';
+            }
+            localStorage.setItem('scrapeX_favs', JSON.stringify(favorites));
+        }
+
+        // 3. Render Gallery
+        function render(data) {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = data.length ? '' : '<p style="text-align:center;width:100%;grid-column:1/-1;padding:50px;">No wallpapers found here!</p>';
+            
+            data.forEach((img, i) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const thumb = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1000`;
+                const full = `https://drive.google.com/uc?export=download&id=${img.id}`;
+                const isFav = favorites.includes(img.id);
+                
+                card.innerHTML = `
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav('${img.id}', this)">
+                        ${isFav ? '❤️' : '♡'}
+                    </button>
+                    <div class="img-box" onclick="openPreview('${thumb}')">
+                        <div class="shimmer-anim"></div>
+                        <img src="${thumb}" onload="this.classList.add('loaded'); this.previousElementSibling.remove()">
+                    </div>
+                    <div class="info">
+                        <a href="${full}" target="_blank" class="download-btn">DOWNLOAD</a>
+                        <button class="copy-btn" onclick="navigator.clipboard.writeText('${full}').then(()=>alert('Link Copied!'))">COPY</button>
+                    </div>`;
+                gallery.appendChild(card);
+                setTimeout(() => card.classList.add('show'), i * 80);
+            });
+        }
+
+        // 4. Sort & Favorite Filter Logic
+        document.getElementById('sort-select').onchange = (e) => {
+            const val = e.target.value;
+            let displayData = [...allData];
+
+            if (val === 'old') {
+                displayData.reverse();
+            } else if (val === 'fav') {
+                displayData = allData.filter(img => favorites.includes(img.id));
+            }
+            
+            render(displayData);
+        };
+
+        // 5. Preview Modal
+        const modal = document.getElementById('preview-modal');
+        function openPreview(url) { document.getElementById('modal-img').src = url; modal.style.display = 'flex'; }
+        document.getElementById('close-modal').onclick = () => modal.style.display = 'none';
+
+        // 6. Initial Load
+        async function start() {
+            try {
+                const res = await fetch(`${script_url}?t=${Date.now()}`);
+                allData = await res.json();
+                document.getElementById('loader').style.display = 'none';
+                
+                const hr = new Date().getHours();
+                document.getElementById('greeting').innerText = hr < 12 ? "🌅 Good Morning!" : (hr < 18 ? "☀️ Good Afternoon!" : "🌙 Good Evening!");
+                
+                render(allData);
+            } catch (e) { document.getElementById('loader').innerText = "Failed to sync!"; }
+        }
+
+        start();
+    </script>
+</body>
+</html>
