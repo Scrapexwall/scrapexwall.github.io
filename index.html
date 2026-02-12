@@ -61,31 +61,16 @@
         
         #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
 
-        /* FIXED NAVIGATION */
-        .top-nav { 
-            position: fixed; 
-            top: 20px; 
-            right: 20px; 
-            z-index: 9999; 
-            display: flex; 
-            gap: 12px; 
-        }
+        .top-nav { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; gap: 12px; }
         
         .nav-btn { 
             background: var(--glass); 
             backdrop-filter: blur(20px); 
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border); 
-            cursor: pointer; 
-            width: 48px; 
-            height: 48px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 1.3rem; 
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            color: var(--text); 
+            cursor: pointer; width: 48px; height: 48px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem; 
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--text); 
             box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
         }
         .nav-btn:active { transform: scale(0.9); }
@@ -123,11 +108,7 @@
         .fav-btn.active { color: #ff4757; background: white; }
         
         .img-box { width: 100%; height: 380px; position: relative; overflow: hidden; cursor: zoom-in; background: rgba(255,255,255,0.05); }
-        .card img { 
-            width: 100%; height: 100%; object-fit: cover; 
-            transition: opacity 0.8s ease, filter 0.8s ease; 
-            opacity: 0; filter: blur(20px); 
-        }
+        .card img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.8s ease, filter 0.8s ease; opacity: 0; filter: blur(20px); }
         .card img.loaded { opacity: 1; filter: blur(0); }
         
         .info { padding: 20px; display: flex; gap: 10px; position: relative; background: rgba(255,255,255,0.05); }
@@ -147,11 +128,16 @@
 
         .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 16px; cursor: pointer; font-weight: 600; backdrop-filter: blur(10px); }
 
-        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(20px); flex-direction: column; }
+        /* Preview Modal with Download Options */
+        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(25px); flex-direction: column; padding: 20px; }
         .phone-frame { width: 280px; height: 580px; border: 10px solid #111; border-radius: 45px; position: relative; overflow: hidden; box-shadow: 0 0 60px rgba(0,0,0,0.5); background: #000; }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
         .phone-time { position: absolute; top: 45px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 200; }
         #close-modal { position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; }
+
+        .modal-actions { margin-top: 25px; display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 300px; }
+        .modal-dl-btn { background: var(--blue); color: white; text-decoration: none; padding: 12px 30px; border-radius: 20px; font-weight: 700; width: 100%; text-align: center; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
+        .modal-dl-secondary { background: rgba(255,255,255,0.1); color: white; text-decoration: none; padding: 10px 25px; border-radius: 20px; font-size: 0.9rem; width: 80%; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
 
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 2px; }
         
@@ -160,8 +146,8 @@
 
         @media (max-width: 600px) {
             h1 { font-size: 2.5rem; }
-            .top-nav { top: 15px; right: 15px; }
-            .nav-btn { width: 42px; height: 42px; font-size: 1.1rem; }
+            .phone-frame { width: 240px; height: 500px; }
+            .phone-time { font-size: 2.8rem; }
         }
     </style>
 </head>
@@ -197,7 +183,10 @@
             <div class="phone-time" id="phone-time">12:00</div>
             <img id="modal-img" src="">
         </div>
-        <p style="color: white; margin-top: 25px; font-weight: 500; letter-spacing: 1px;">PREVIEW MODE</p>
+        <div class="modal-actions">
+            <a id="modal-4k" href="#" target="_blank" class="modal-dl-btn">DOWNLOAD 4K</a>
+            <a id="modal-1080" href="#" target="_blank" class="modal-dl-secondary">Download 1080p</a>
+        </div>
     </div>
 
     <footer>
@@ -214,7 +203,7 @@
             });
         }
 
-        // Feature 5: Dynamic Background Color on Scroll
+        // Feature 5: Dynamic Background
         window.addEventListener('scroll', () => {
             const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
             const hue = 210 + (scrollPercent * 80); 
@@ -246,20 +235,18 @@
             localStorage.setItem('scrapex-theme', isDark ? 'light' : 'dark');
         };
 
-        // Load saved theme
         const savedTheme = localStorage.getItem('scrapex-theme');
         if (savedTheme) {
             document.documentElement.setAttribute('data-theme', savedTheme);
             themeBtn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
         }
 
-        // Feature 4: Random Wallpaper Logic
+        // Fixed Random Wallpaper Logic
         document.getElementById('random-btn').onclick = () => {
             if (allData.length > 0) {
                 const randomImg = allData[Math.floor(Math.random() * allData.length)];
-                openPreview(`https://drive.google.com/thumbnail?id=${randomImg.id}&sz=w1000`);
+                openPreview(randomImg.id);
                 
-                // Visual Feedback
                 const btn = document.getElementById('random-btn');
                 btn.style.transform = "rotate(360deg)";
                 setTimeout(() => btn.style.transform = "rotate(0deg)", 500);
@@ -281,7 +268,7 @@
                     <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
                         ${favorites.includes(img.id) ? '❤️' : '♡'}
                     </button>
-                    <div class="img-box" onclick="openPreview('${thumb}')">
+                    <div class="img-box" onclick="openPreview('${img.id}')">
                         <img src="${thumb}" class="progressive-img" onload="this.classList.add('loaded')" alt="Wallpaper">
                     </div>
                     <div class="info">
@@ -300,9 +287,7 @@
         }
 
         function copyLink(link) {
-            navigator.clipboard.writeText(link).then(() => {
-                alert('Premium Link Copied!');
-            });
+            navigator.clipboard.writeText(link).then(() => alert('Premium Link Copied!'));
         }
 
         function toggleDlMenu(id) {
@@ -329,8 +314,16 @@
         }
         start();
 
-        function openPreview(url) { 
-            document.getElementById('modal-img').src = url; 
+        // Fixed Preview Logic for Random & Card clicks
+        function openPreview(id) { 
+            const thumbUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+            const download4k = `https://drive.google.com/uc?export=download&id=${id}`;
+            const download1080 = `https://drive.google.com/thumbnail?id=${id}&sz=w1920`;
+
+            document.getElementById('modal-img').src = thumbUrl; 
+            document.getElementById('modal-4k').href = download4k;
+            document.getElementById('modal-1080').href = download1080;
+            
             document.getElementById('preview-modal').style.display = 'flex'; 
             updateTime();
         }
