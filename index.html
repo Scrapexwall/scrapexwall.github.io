@@ -3,21 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2563eb">
     
+    <title>ScrapeX Wallpapers | Premium 4K Liquid Collection</title>
+    <meta name="description" content="Explore and download premium 4K wallpapers from ScrapeX. High-quality backgrounds curated by Asish with a stunning Liquid Glass UI.">
+    <meta name="keywords" content="ScrapeX, 4K Wallpapers, Premium Backgrounds, Liquid Glass UI, Wallpapers by Asish, HD Mobile Wallpapers">
+    <meta name="author" content="Asish">
+    <link rel="canonical" href="https://scrapexwall.github.io/">
+
+    <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE" />
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scrapexwall.github.io/">
+    <meta property="og:title" content="ScrapeX Wallpapers | Premium 4K Liquid Collection">
+    <meta property="og:description" content="Experience the best 4K wallpapers with a unique Liquid Glass interface.">
+    <meta property="og:image" content="./Logo.png">
+
+    <meta name="theme-color" content="#2563eb">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="./Logo.png">
 
-    <title>ScrapeX Wallpapers | Real Liquid Glass</title>
-    
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@2.12.0/tsparticles.preset.links.bundle.min.js"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root { 
             --bg: #f0f4f8; 
-            /* কার্ডের স্বচ্ছতা কমিয়ে ০.১৫ করা হয়েছে যাতে পেছনের পার্টিকেল দেখা যায় */
             --glass: rgba(255, 255, 255, 0.15); 
             --text: #0f172a; 
             --border: rgba(255, 255, 255, 0.4); 
@@ -39,7 +50,6 @@
             transition: 0.5s ease; 
             overflow-x: hidden; 
             min-height: 100vh;
-            /* হালকা গ্রাডিয়েন্ট যোগ করা হয়েছে গ্লাস এফেক্ট ফুটিয়ে তুলতে */
             background: linear-gradient(135deg, var(--bg) 0%, #dbeafe 100%);
             background-attachment: fixed;
         }
@@ -65,7 +75,6 @@
         h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; }
         h1 span { color: var(--blue); }
         .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
-        #greeting { margin-top: 15px; opacity: 0.8; font-weight: 500; }
         
         .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; }
         #sort-select { 
@@ -77,7 +86,6 @@
         
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; }
         
-        /* REAL LIQUID GLASS CARD */
         .card { 
             background: var(--glass) !important; 
             backdrop-filter: blur(16px) saturate(180%); 
@@ -101,7 +109,7 @@
         .info { padding: 20px; display: flex; gap: 10px; position: relative; background: rgba(255,255,255,0.05); }
         
         .dl-container { position: relative; flex: 2; }
-        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 13px; border-radius: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); }
+        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 13px; border-radius: 16px; font-weight: 700; cursor: pointer; transition: 0.3s; }
         
         .dl-menu { 
             display: none; position: absolute; bottom: 115%; left: 0; width: 100%; 
@@ -133,7 +141,7 @@
     <header>
         <h1>Scrape<span>X</span></h1>
         <div class="creator">CREATED BY ASISH</div>
-        <p id="greeting">Connecting...</p>
+        <p id="greeting">Connecting to Server...</p>
     </header>
 
     <div class="controls">
@@ -156,11 +164,18 @@
         <p style="color: white; margin-top: 25px; font-weight: 500; letter-spacing: 1px;">PREVIEW MODE</p>
     </div>
 
-    <footer>© 2026 SCRAPEX | PREMIUM 4K COLLECTION</footer>
+    <footer>© 2026 SCRAPEX | PREMIUM 4K COLLECTION | <a href="/sitemap.xml" style="color: inherit; text-decoration: none;">Sitemap</a></footer>
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
-        // Liquid Particles (বড় বব্বল করা হয়েছে যাতে গ্লাসের নিচে সুন্দর দেখায়)
+        // PWA & Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
+            });
+        }
+
+        // Liquid Particles
         tsParticles.load("tsparticles", {
             particles: {
                 number: { value: 20, density: { enable: true, value_area: 800 } },
@@ -199,7 +214,7 @@
                         ${favorites.includes(img.id) ? '❤️' : '♡'}
                     </button>
                     <div class="img-box" onclick="openPreview('${thumb}')">
-                        <img src="${thumb}" onload="this.classList.add('loaded')">
+                        <img src="${thumb}" onload="this.classList.add('loaded')" alt="Wallpaper ${img.id}">
                     </div>
                     <div class="info">
                         <div class="dl-container">
@@ -234,7 +249,7 @@
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
                 allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
-                document.getElementById('greeting').innerText = "Premium Wallpapers";
+                document.getElementById('greeting').innerText = "Premium 4K Wallpapers";
                 render(allData);
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
@@ -261,3 +276,4 @@
     </script>
 </body>
 </html>
+
