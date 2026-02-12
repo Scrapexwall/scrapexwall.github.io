@@ -25,12 +25,13 @@
         .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 1001; }
         #theme-btn { background: var(--card); border: 1px solid var(--border); cursor: pointer; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; color: var(--text); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        header { text-align: center; padding: 60px 20px; border-bottom: 1px solid var(--border); }
-        /* Header-logo class removed from here */
-        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; }
+        /* Header ekhon aro clean: top padding 40px kora hoyeche */
+        header { text-align: center; padding: 40px 20px; border-bottom: 1px solid var(--border); }
+        
+        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; line-height: 1; }
         h1 span { color: var(--blue); }
-        .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
-        #greeting { margin-top: 15px; opacity: 0.8; }
+        .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 10px; text-transform: uppercase; }
+        #greeting { margin-top: 15px; opacity: 0.8; font-weight: 500; }
 
         .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; }
         #sort-select { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 12px 15px; border-radius: 12px; font-weight: 600; cursor: pointer; outline: none; }
@@ -172,4 +173,3 @@
     </script>
 </body>
 </html>
-
