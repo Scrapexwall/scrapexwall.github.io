@@ -29,17 +29,17 @@
     <style>
         :root { 
             --bg: #f0f4f8; 
-            --glass: rgba(255, 255, 255, 0.25); 
+            --glass: rgba(255, 255, 255, 0.22); 
             --text: #0f172a; 
-            --border: rgba(255, 255, 255, 0.7); 
+            --border: rgba(255, 255, 255, 0.5); 
             --blue: #2563eb; 
             --dynamic-hue: 210deg;
         }
         [data-theme="dark"] { 
             --bg: #020617; 
-            --glass: rgba(15, 23, 42, 0.5); 
+            --glass: rgba(15, 23, 42, 0.4); 
             --text: #f8fafc; 
-            --border: rgba(255, 255, 255, 0.15); 
+            --border: rgba(255, 255, 255, 0.1); 
             --blue: #3b82f6; 
         }
         
@@ -48,108 +48,86 @@
             background-color: var(--bg); 
             color: var(--text); 
             margin: 0; 
-            transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            transition: background 0.4s linear; 
             overflow-x: hidden; 
             min-height: 100vh;
-            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 30%, 92%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 40%, 96%) 100%);
+            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 25%, 94%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 30%, 97%) 100%);
             background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
         }
 
         [data-theme="dark"] body {
-            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 80%, 4%) 0%, hsl(calc(var(--dynamic-hue) + 30deg), 70%, 8%) 100%);
+            background: linear-gradient(135deg, hsl(var(--dynamic-hue), 80%, 3%) 0%, hsl(calc(var(--dynamic-hue) + 30deg), 70%, 7%) 100%);
         }
         
-        #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
+        #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; pointer-events: none; }
 
         .top-nav { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; gap: 12px; }
         
         .nav-btn { 
             background: var(--glass); 
-            backdrop-filter: blur(30px) saturate(200%); 
-            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--border); 
-            cursor: pointer; width: 48px; height: 48px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; font-size: 1.3rem; 
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); color: var(--text); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1), inset 0 0 15px rgba(255,255,255,0.2); 
+            cursor: pointer; width: 46px; height: 46px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; 
+            transition: 0.3s; color: var(--text); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05); 
         }
-        .nav-btn:active { transform: scale(0.9); }
         
-        header { text-align: center; padding: 80px 20px 40px; position: relative; }
-        h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; text-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        header { text-align: center; padding: 70px 20px 30px; }
+        h1 { font-size: 3.2rem; margin: 0; font-weight: 800; letter-spacing: -1.5px; }
         h1 span { color: var(--blue); }
-        .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
+        .creator { font-size: 10px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; opacity: 0.8; }
         
-        .controls { max-width: 1400px; margin: 20px auto; padding: 0 20px; display: flex; justify-content: flex-end; }
-        #sort-select { 
-            background: var(--glass); color: var(--text); backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border); padding: 12px 15px; border-radius: 15px; 
-            font-weight: 600; cursor: pointer; outline: none; box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
-        
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; }
         
         .card { 
             background: var(--glass) !important; 
-            backdrop-filter: blur(40px) saturate(220%) contrast(110%); 
-            -webkit-backdrop-filter: blur(40px) saturate(220%) contrast(110%);
-            border-radius: 35px; overflow: hidden; 
+            backdrop-filter: blur(20px) saturate(160%); /* Optimized Blur for smoothness */
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border-radius: 30px; overflow: hidden; 
             border: 1px solid var(--border) !important; 
-            transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
-            opacity: 0; transform: translateY(30px); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12), inset 0 0 20px rgba(255,255,255,0.15);
-            position: relative;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease; 
+            opacity: 0; transform: translateY(20px) translateZ(0); 
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+            will-change: transform; /* Boosts Performance */
         }
-        .card.show { opacity: 1; transform: translateY(0); }
-        .card:hover { transform: translateY(-15px); border-color: rgba(255,255,255,1) !important; box-shadow: 0 30px 60px rgba(0,0,0,0.2); }
+        .card.show { opacity: 1; transform: translateY(0) translateZ(0); }
+        .card:hover { transform: translateY(-10px) scale(1.02); }
         
-        .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.3); border: none; color: white; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(15px); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
+        .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; transition: 0.3s; }
         .fav-btn.active { color: #ff4757; background: white; }
         
-        .img-box { width: 100%; height: 420px; position: relative; overflow: hidden; cursor: zoom-in; }
-        .card img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s ease; opacity: 0; filter: blur(20px); }
-        .card:hover img { transform: scale(1.08); }
-        .card img.loaded { opacity: 1; filter: blur(0); }
+        .img-box { width: 100%; height: 400px; position: relative; overflow: hidden; cursor: zoom-in; background: rgba(0,0,0,0.02); }
+        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease; }
+        .card img.loaded { opacity: 1; }
         
-        .info { padding: 25px; display: flex; gap: 12px; position: relative; background: rgba(255,255,255,0.1); border-top: 1px solid var(--border); }
-        
-        .dl-container { position: relative; flex: 2; }
-        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 15px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); }
-        
+        .info { padding: 20px; display: flex; gap: 10px; border-top: 1px solid var(--border); }
+        .download-btn { flex: 2; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; }
         .dl-menu { 
-            display: none; position: absolute; bottom: 125%; left: 0; width: 100%; 
-            background: var(--glass); backdrop-filter: blur(40px) saturate(200%); border: 1px solid var(--border); 
-            border-radius: 25px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); z-index: 100; overflow: hidden;
+            display: none; position: absolute; bottom: 120%; left: 0; width: 100%; 
+            background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--border); 
+            border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); z-index: 100; overflow: hidden;
         }
-        .dl-menu.active { display: block; animation: glassSlide 0.4s ease; }
-        @keyframes glassSlide { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .dl-item { padding: 18px; font-size: 0.9rem; font-weight: 700; color: var(--text); text-decoration: none; display: flex; justify-content: space-between; transition: 0.2s; }
+        .dl-menu.active { display: block; }
+        .dl-item { padding: 15px; font-size: 0.85rem; font-weight: 700; color: var(--text); text-decoration: none; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
         .dl-item:hover { background: var(--blue); color: white; }
 
-        .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 20px; cursor: pointer; font-weight: 600; backdrop-filter: blur(15px); transition: 0.3s; }
+        .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); border-radius: 15px; cursor: pointer; font-weight: 600; }
 
-        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(50px) saturate(180%); flex-direction: column; padding: 20px; }
-        .phone-frame { width: 280px; height: 580px; border: 14px solid #1a1a1a; border-radius: 55px; position: relative; overflow: hidden; box-shadow: 0 0 100px rgba(0,0,0,0.7); background: #000; }
+        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(25px); flex-direction: column; padding: 20px; }
+        .phone-frame { width: 260px; height: 550px; border: 10px solid #111; border-radius: 45px; position: relative; overflow: hidden; background: #000; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
-        .phone-time { position: absolute; top: 45px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 200; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 45px; color: white; cursor: pointer; z-index: 10001; transition: 0.3s; }
-        #close-modal:hover { transform: scale(1.2) rotate(90deg); }
+        #close-modal { position: absolute; top: 20px; right: 20px; font-size: 40px; color: white; cursor: pointer; }
 
-        .modal-actions { margin-top: 30px; display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 300px; }
-        .modal-dl-btn { background: var(--blue); color: white; text-decoration: none; padding: 16px 35px; border-radius: 25px; font-weight: 800; width: 100%; text-align: center; box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4); transition: 0.3s; }
-        .modal-dl-secondary { background: rgba(255,255,255,0.15); color: white; text-decoration: none; padding: 12px 25px; border-radius: 20px; font-size: 0.9rem; width: 85%; text-align: center; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
-
-        #loader { text-align: center; padding: 120px; font-weight: 800; color: var(--blue); letter-spacing: 4px; font-size: 1.3rem; }
-        
-        footer { text-align: center; padding: 60px 20px; font-size: 13px; font-weight: 600; color: var(--text); opacity: 0.7; letter-spacing: 1px; border-top: 1px solid var(--border); }
-        footer a { color: var(--blue); text-decoration: none; font-weight: 700; margin-left: 10px; }
+        #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 2px; }
+        footer { text-align: center; padding: 50px 20px; font-size: 12px; opacity: 0.6; }
 
         @media (max-width: 600px) {
-            h1 { font-size: 2.8rem; }
-            .phone-frame { width: 260px; height: 530px; }
-            .gallery { gap: 25px; padding: 15px; }
+            h1 { font-size: 2.5rem; }
+            .gallery { gap: 15px; padding: 10px; }
+            .phone-frame { width: 240px; height: 500px; }
         }
     </style>
 </head>
@@ -158,14 +136,14 @@
     <div id="tsparticles"></div>
     
     <div class="top-nav">
-        <button class="nav-btn" id="random-btn" title="Surprise Me!">🎲</button>
-        <button class="nav-btn" id="theme-btn" title="Toggle Theme">🌙</button>
+        <button class="nav-btn" id="random-btn">🎲</button>
+        <button class="nav-btn" id="theme-btn">🌙</button>
     </div>
 
     <header>
         <h1>Scrape<span>X</span></h1>
         <div class="creator">CREATED BY ASISH</div>
-        <p id="greeting">Connecting to Server...</p>
+        <p id="greeting">Premium 4K Collection</p>
     </header>
 
     <div class="controls">
@@ -182,72 +160,45 @@
     <div id="preview-modal">
         <span id="close-modal">&times;</span>
         <div class="phone-frame">
-            <div class="phone-time" id="phone-time">12:00</div>
             <img id="modal-img" src="">
         </div>
-        <div class="modal-actions">
-            <a id="modal-4k" href="#" target="_blank" class="modal-dl-btn">DOWNLOAD 4K</a>
-            <a id="modal-1080" href="#" target="_blank" class="modal-dl-secondary">Download 1080p</a>
+        <div style="margin-top:20px; display:flex; gap:10px; width:260px;">
+            <a id="modal-4k" href="#" target="_blank" style="flex:1; background:var(--blue); color:white; text-align:center; padding:15px; border-radius:20px; text-decoration:none; font-weight:800; font-size:0.9rem;">DOWNLOAD 4K</a>
         </div>
     </div>
 
-    <footer>
-        © 2026 SCRAPEX | PREMIUM 4K COLLECTION | 
-        <a href="sitemap.xml" target="_blank">Sitemap</a>
-    </footer>
+    <footer>© 2026 SCRAPEX | ASISH</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <script>
-        // PWA registration
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
-            });
-        }
-
-        // Scroll Dynamic Hue
-        window.addEventListener('scroll', () => {
-            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-            const hue = 210 + (scrollPercent * 80); 
-            document.documentElement.style.setProperty('--dynamic-hue', hue + 'deg');
-        });
-
-        // Advanced Liquid Bubble Effect
+        // Smooth Particles Configuration
         tsParticles.load("tsparticles", {
+            fpsLimit: 60, // Fixed FPS for smooth scrolling
             particles: {
-                number: { value: 12, density: { enable: true, value_area: 800 } },
-                color: { value: ["#2563eb", "#60a5fa", "#a855f7", "#ec4899"] },
+                number: { value: 8, density: { enable: true, value_area: 1000 } },
+                color: { value: ["#2563eb", "#a855f7"] },
                 shape: { type: "circle" },
-                opacity: { 
-                    value: 0.4, 
-                    random: true,
-                    anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-                },
-                size: { 
-                    value: { min: 60, max: 130 }, 
-                    random: true,
-                    anim: { enable: true, speed: 2, size_min: 40, sync: false }
-                },
+                opacity: { value: 0.3 },
+                size: { value: { min: 40, max: 100 } },
                 move: { 
                     enable: true, 
-                    speed: 1.2, 
+                    speed: 1, 
                     direction: "none", 
-                    random: true, 
-                    outModes: { default: "out" },
-                    attract: { enable: true, rotateX: 600, rotateY: 1200 }
+                    outModes: { default: "out" }
                 },
             },
-            interactivity: {
-                detectsOn: "canvas",
-                events: {
-                    onHover: { enable: true, mode: "bubble" },
-                    resize: true
-                },
-                modes: {
-                    bubble: { distance: 250, size: 160, duration: 2, opacity: 0.5 }
-                }
-            },
-            retina_detect: true
+            interactivity: { events: { resize: true } },
+            detectsOn: "window"
+        });
+
+        // Dynamic Hue on Scroll (Throttled for performance)
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const now = Date.now();
+            if (now - lastScroll < 50) return;
+            lastScroll = now;
+            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            document.documentElement.style.setProperty('--dynamic-hue', (210 + (scrollPercent * 60)) + 'deg');
         });
 
         const script_url = 'https://script.google.com/macros/s/AKfycbwNwvh0AEvhLJhLQV-gmCnQxOSI4o2zu4T91bDVpDY_41wWwhn-uHgQ2hbbWUm2mNdz5A/exec';
@@ -267,57 +218,49 @@
             themeBtn.innerText = '☀️';
         }
 
-        document.getElementById('random-btn').onclick = () => {
-            if (allData.length > 0) {
-                const randomImg = allData[Math.floor(Math.random() * allData.length)];
-                openPreview(randomImg.id);
-                const btn = document.getElementById('random-btn');
-                btn.style.transform = "rotate(360deg)";
-                setTimeout(() => btn.style.transform = "rotate(0deg)", 500);
-            }
-        };
-
         function render(data) {
             const gallery = document.getElementById('gallery');
-            gallery.innerHTML = data.length ? '' : '<p style="text-align:center;width:100%;padding:50px;opacity:0.5;">No wallpapers found!</p>';
+            gallery.innerHTML = '';
             
             data.forEach((img, i) => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 const thumb = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1000`;
                 const full = `https://drive.google.com/uc?export=download&id=${img.id}`;
-                const hd = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1920`;
                 
                 card.innerHTML = `
                     <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
                         ${favorites.includes(img.id) ? '❤️' : '♡'}
                     </button>
                     <div class="img-box" onclick="openPreview('${img.id}')">
-                        <img src="${thumb}" class="progressive-img" onload="this.classList.add('loaded')" alt="Wallpaper">
+                        <img src="${thumb}" onload="this.classList.add('loaded')" alt="Wallpaper">
                     </div>
                     <div class="info">
-                        <div class="dl-container">
+                        <div style="position:relative; flex:2;">
                             <button class="download-btn" onclick="toggleDlMenu('${img.id}')">DOWNLOAD ▾</button>
                             <div class="dl-menu" id="menu-${img.id}">
-                                <a href="${full}" target="_blank" class="dl-item">Ultra HD <span>4K</span></a>
-                                <a href="${hd}" target="_blank" class="dl-item">Balanced <span>1080p</span></a>
+                                <a href="${full}" target="_blank" class="dl-item">Ultra HD 4K</a>
+                                <a href="https://drive.google.com/thumbnail?id=${img.id}&sz=w1920" target="_blank" class="dl-item">Balanced 1080p</a>
                             </div>
                         </div>
-                        <button class="copy-btn" onclick="copyLink('${full}')">COPY</button>
+                        <button class="copy-btn" onclick="copyLink('${full}')">LINK</button>
                     </div>`;
                 gallery.appendChild(card);
-                setTimeout(() => card.classList.add('show'), i * 60);
+                // Trigger animation
+                requestAnimationFrame(() => {
+                    setTimeout(() => card.classList.add('show'), i * 50);
+                });
             });
-        }
-
-        function copyLink(link) {
-            navigator.clipboard.writeText(link).then(() => alert('Link Copied!'));
         }
 
         function toggleDlMenu(id) {
             const menu = document.getElementById(`menu-${id}`);
             document.querySelectorAll('.dl-menu').forEach(m => { if(m !== menu) m.classList.remove('active') });
             menu.classList.toggle('active');
+        }
+
+        function copyLink(link) {
+            navigator.clipboard.writeText(link).then(() => alert('Copied!'));
         }
 
         function toggleFav(id, btn) {
@@ -327,47 +270,38 @@
             localStorage.setItem('scrapeX_favs', JSON.stringify(favorites));
         }
 
+        function openPreview(id) { 
+            document.getElementById('modal-img').src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; 
+            document.getElementById('modal-4k').href = `https://drive.google.com/uc?export=download&id=${id}`;
+            document.getElementById('preview-modal').style.display = 'flex'; 
+        }
+
+        document.getElementById('close-modal').onclick = () => document.getElementById('preview-modal').style.display = 'none';
+
         async function start() {
             try {
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
                 allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
-                document.getElementById('greeting').innerText = "Premium 4K Wallpapers";
                 render(allData);
-            } catch (e) { document.getElementById('loader').innerText = "Connection Failed!"; }
+            } catch (e) { document.getElementById('loader').innerText = "Failed!"; }
         }
         start();
-
-        function openPreview(id) { 
-            const thumbUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
-            const download4k = `https://drive.google.com/uc?export=download&id=${id}`;
-            const download1080 = `https://drive.google.com/thumbnail?id=${id}&sz=w1920`;
-
-            document.getElementById('modal-img').src = thumbUrl; 
-            document.getElementById('modal-4k').href = download4k;
-            document.getElementById('modal-1080').href = download1080;
-            
-            document.getElementById('preview-modal').style.display = 'flex'; 
-            updateTime();
-        }
-
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('phone-time').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-        }
-
-        document.getElementById('close-modal').onclick = () => document.getElementById('preview-modal').style.display = 'none';
-        
-        window.onclick = (e) => {
-            if (!e.target.matches('.download-btn')) document.querySelectorAll('.dl-menu').forEach(m => m.classList.remove('active'));
-            if (e.target == document.getElementById('preview-modal')) document.getElementById('preview-modal').style.display = 'none';
-        };
 
         document.getElementById('sort-select').onchange = (e) => {
             let displayData = [...allData];
             if (e.target.value === 'old') displayData.reverse();
             else if (e.target.value === 'fav') displayData = allData.filter(img => favorites.includes(img.id));
             render(displayData);
+        };
+
+        document.getElementById('random-btn').onclick = () => {
+            if (allData.length) openPreview(allData[Math.floor(Math.random() * allData.length)].id);
+        };
+
+        window.onclick = (e) => {
+            if (!e.target.matches('.download-btn')) document.querySelectorAll('.dl-menu').forEach(m => m.classList.remove('active'));
+            if (e.target == document.getElementById('preview-modal')) document.getElementById('preview-modal').style.display = 'none';
         };
     </script>
 </body>
