@@ -33,7 +33,7 @@
             --text: #0f172a; 
             --border: rgba(255, 255, 255, 0.4); 
             --blue: #2563eb; 
-            --dynamic-hue: 210deg; /* For Dynamic Background */
+            --dynamic-hue: 210deg;
         }
         [data-theme="dark"] { 
             --bg: #020617; 
@@ -48,10 +48,9 @@
             background-color: var(--bg); 
             color: var(--text); 
             margin: 0; 
-            transition: background 0.3s ease; 
+            transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
             overflow-x: hidden; 
             min-height: 100vh;
-            /* Feature 5: Dynamic Background Initial State */
             background: linear-gradient(135deg, hsl(var(--dynamic-hue), 30%, 90%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 40%, 95%) 100%);
             background-attachment: fixed;
         }
@@ -62,18 +61,36 @@
         
         #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
 
-        .top-nav { position: fixed; top: 20px; right: 20px; z-index: 1001; display: flex; gap: 10px; }
-        .nav-btn { 
-            background: var(--glass); 
-            backdrop-filter: blur(15px); 
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--border); 
-            cursor: pointer; width: 45px; height: 45px; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; font-size: 1.2rem; 
-            transition: 0.3s; color: var(--text); box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        /* FIXED NAVIGATION */
+        .top-nav { 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 9999; 
+            display: flex; 
+            gap: 12px; 
         }
         
-        header { text-align: center; padding: 60px 20px; position: relative; }
+        .nav-btn { 
+            background: var(--glass); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border); 
+            cursor: pointer; 
+            width: 48px; 
+            height: 48px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.3rem; 
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            color: var(--text); 
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1); 
+        }
+        .nav-btn:active { transform: scale(0.9); }
+        
+        header { text-align: center; padding: 80px 20px 40px; position: relative; }
         h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; }
         h1 span { color: var(--blue); }
         .creator { font-size: 11px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; text-transform: uppercase; }
@@ -97,6 +114,7 @@
             transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
             opacity: 0; transform: translateY(30px); 
             box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            position: relative;
         }
         .card.show { opacity: 1; transform: translateY(0); }
         .card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.8) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
@@ -104,11 +122,10 @@
         .fav-btn { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 1.2rem; transition: 0.3s; backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.2); }
         .fav-btn.active { color: #ff4757; background: white; }
         
-        /* Feature 3: Progressive Blur Loading */
         .img-box { width: 100%; height: 380px; position: relative; overflow: hidden; cursor: zoom-in; background: rgba(255,255,255,0.05); }
         .card img { 
             width: 100%; height: 100%; object-fit: cover; 
-            transition: opacity 1s ease-in-out, filter 1s ease-in-out; 
+            transition: opacity 0.8s ease, filter 0.8s ease; 
             opacity: 0; filter: blur(20px); 
         }
         .card img.loaded { opacity: 1; filter: blur(0); }
@@ -130,16 +147,22 @@
 
         .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 16px; cursor: pointer; font-weight: 600; backdrop-filter: blur(10px); }
 
-        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(20px); flex-direction: column; }
+        #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(20px); flex-direction: column; }
         .phone-frame { width: 280px; height: 580px; border: 10px solid #111; border-radius: 45px; position: relative; overflow: hidden; box-shadow: 0 0 60px rgba(0,0,0,0.5); background: #000; }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
         .phone-time { position: absolute; top: 45px; width: 100%; text-align: center; color: white; font-size: 3.5rem; font-weight: 200; }
-        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer; }
+        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 40px; color: white; cursor: pointer; z-index: 10001; }
 
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 2px; }
         
         footer { text-align: center; padding: 50px 20px; font-size: 13px; font-weight: 500; color: var(--text); opacity: 0.8; letter-spacing: 0.5px; }
         footer a { color: var(--blue); text-decoration: none; font-weight: 700; margin-left: 5px; transition: 0.3s; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .top-nav { top: 15px; right: 15px; }
+            .nav-btn { width: 42px; height: 42px; font-size: 1.1rem; }
+        }
     </style>
 </head>
 <body>
@@ -148,7 +171,7 @@
     
     <div class="top-nav">
         <button class="nav-btn" id="random-btn" title="Surprise Me!">🎲</button>
-        <button class="nav-btn" id="theme-btn">🌙</button>
+        <button class="nav-btn" id="theme-btn" title="Toggle Theme">🌙</button>
     </div>
 
     <header>
@@ -194,19 +217,19 @@
         // Feature 5: Dynamic Background Color on Scroll
         window.addEventListener('scroll', () => {
             const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-            const hue = 210 + (scrollPercent * 100); // Blue to Purple shift
+            const hue = 210 + (scrollPercent * 80); 
             document.documentElement.style.setProperty('--dynamic-hue', hue + 'deg');
         });
 
         // Particles
         tsParticles.load("tsparticles", {
             particles: {
-                number: { value: 20, density: { enable: true, value_area: 800 } },
+                number: { value: 25, density: { enable: true, value_area: 800 } },
                 color: { value: ["#2563eb", "#60a5fa", "#3b82f6"] },
                 shape: { type: "circle" },
-                opacity: { value: 0.4 },
-                size: { value: { min: 20, max: 60 } },
-                move: { enable: true, speed: 1, direction: "none", outModes: "out" },
+                opacity: { value: 0.3 },
+                size: { value: { min: 10, max: 40 } },
+                move: { enable: true, speed: 0.8, direction: "none", outModes: "out" },
             }
         });
 
@@ -214,18 +237,32 @@
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
 
+        // THEME TOGGLE
         const themeBtn = document.getElementById('theme-btn');
         themeBtn.onclick = () => {
             const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
             document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
             themeBtn.innerText = isDark ? '🌙' : '☀️';
+            localStorage.setItem('scrapex-theme', isDark ? 'light' : 'dark');
         };
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('scrapex-theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeBtn.innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+        }
 
         // Feature 4: Random Wallpaper Logic
         document.getElementById('random-btn').onclick = () => {
             if (allData.length > 0) {
                 const randomImg = allData[Math.floor(Math.random() * allData.length)];
                 openPreview(`https://drive.google.com/thumbnail?id=${randomImg.id}&sz=w1000`);
+                
+                // Visual Feedback
+                const btn = document.getElementById('random-btn');
+                btn.style.transform = "rotate(360deg)";
+                setTimeout(() => btn.style.transform = "rotate(0deg)", 500);
             }
         };
 
@@ -238,6 +275,7 @@
                 card.className = 'card';
                 const thumb = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1000`;
                 const full = `https://drive.google.com/uc?export=download&id=${img.id}`;
+                const hd = `https://drive.google.com/thumbnail?id=${img.id}&sz=w1920`;
                 
                 card.innerHTML = `
                     <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
@@ -251,13 +289,19 @@
                             <button class="download-btn" onclick="toggleDlMenu('${img.id}')">DOWNLOAD ▾</button>
                             <div class="dl-menu" id="menu-${img.id}">
                                 <a href="${full}" target="_blank" class="dl-item">Ultra HD <span>4K</span></a>
-                                <a href="https://drive.google.com/thumbnail?id=${img.id}&sz=w1920" target="_blank" class="dl-item">Balanced <span>1080p</span></a>
+                                <a href="${hd}" target="_blank" class="dl-item">Balanced <span>1080p</span></a>
                             </div>
                         </div>
-                        <button class="copy-btn" onclick="navigator.clipboard.writeText('${full}').then(()=>alert('Link Copied!'))">COPY</button>
+                        <button class="copy-btn" onclick="copyLink('${full}')">COPY</button>
                     </div>`;
                 gallery.appendChild(card);
                 setTimeout(() => card.classList.add('show'), i * 60);
+            });
+        }
+
+        function copyLink(link) {
+            navigator.clipboard.writeText(link).then(() => {
+                alert('Premium Link Copied!');
             });
         }
 
@@ -281,14 +325,19 @@
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('greeting').innerText = "Premium 4K Wallpapers";
                 render(allData);
-            } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
+            } catch (e) { document.getElementById('loader').innerText = "Connection Failed!"; }
         }
         start();
 
         function openPreview(url) { 
             document.getElementById('modal-img').src = url; 
             document.getElementById('preview-modal').style.display = 'flex'; 
-            document.getElementById('phone-time').innerText = new Date().getHours().toString().padStart(2, '0') + ":" + new Date().getMinutes().toString().padStart(2, '0');
+            updateTime();
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('phone-time').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
         }
 
         document.getElementById('close-modal').onclick = () => document.getElementById('preview-modal').style.display = 'none';
