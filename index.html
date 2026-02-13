@@ -139,6 +139,7 @@
             font-size: 0.85rem; font-weight: 800; color: var(--blue); box-shadow: var(--shadow);
         }
         
+        /* Header specific updates */
         header { text-align: center; padding: 80px 20px 20px; }
         h1 { 
             font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; 
@@ -204,32 +205,19 @@
             background: rgba(0,0,0,0.4); z-index: 10000; align-items: center; justify-content: center; 
             backdrop-filter: blur(40px); flex-direction: column; 
         }
-        .phone-frame { position: relative; width: 280px; height: 580px; border: 12px solid #1a1a1a; border-radius: 50px; overflow: hidden; background: #000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .phone-frame { width: 280px; height: 580px; border: 12px solid #1a1a1a; border-radius: 50px; overflow: hidden; background: #000; }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Smart UI Overlay */
-        .smart-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: 0.5s; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 60px 20px; box-sizing: border-box; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .smart-ui.active { opacity: 1; }
-        .smart-clock { text-align: center; }
-        .smart-clock h2 { font-size: 3.5rem; margin: 0; font-weight: 300; }
-        .smart-clock p { font-size: 0.9rem; margin: 0; opacity: 0.9; font-weight: 500; }
-        .smart-icons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; width: 100%; margin-bottom: 20px; }
-        .icon-dot { height: 40px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; }
-
         #close-modal { 
             position: absolute; top: 30px; right: 30px; font-size: 24px; color: var(--text); 
             cursor: pointer; width: 45px; height: 45px; background: var(--glass); 
             backdrop-filter: blur(15px); border: 1px solid var(--border); 
             border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            box-shadow: var(--shadow); transition: 0.3s; z-index: 10005;
+            box-shadow: var(--shadow); transition: 0.3s;
         }
 
-        .preview-controls { margin-top: 15px; display: flex; gap: 10px; }
-        .control-btn { background: var(--glass); border: 1px solid var(--border); color: var(--text); padding: 8px 15px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; backdrop-filter: blur(10px); transition: 0.3s; }
-        .control-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
-
-        .dl-options { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; width: 280px; }
-        .dl-link { text-decoration: none; padding: 12px; border-radius: 15px; text-align: center; font-weight: 800; font-size: 0.8rem; transition: 0.3s; }
+        .dl-options { margin-top: 25px; display: flex; flex-direction: column; gap: 12px; width: 280px; }
+        .dl-link { text-decoration: none; padding: 15px; border-radius: 20px; text-align: center; font-weight: 800; font-size: 0.9rem; transition: 0.3s; }
         .ultra-btn { background: var(--blue); color: white; }
         .std-btn { background: var(--glass); color: var(--text); border: 1px solid var(--border); }
 
@@ -303,21 +291,6 @@
         <span id="close-modal" onclick="closePreview()">&times;</span>
         <div class="phone-frame">
             <img id="modal-img" src="">
-            <div class="smart-ui" id="smart-ui">
-                <div class="smart-clock">
-                    <h2 id="preview-time">12:45</h2>
-                    <p id="preview-date">Friday, February 13</p>
-                </div>
-                <div class="smart-icons">
-                    <div class="icon-dot"></div>
-                    <div class="icon-dot"></div>
-                    <div class="icon-dot"></div>
-                    <div class="icon-dot"></div>
-                </div>
-            </div>
-        </div>
-        <div class="preview-controls">
-            <button class="control-btn" id="ui-toggle" onclick="toggleSmartUI()">SHOW UI</button>
         </div>
         <div class="dl-options">
             <a id="modal-4k" class="dl-link ultra-btn" href="#" target="_blank" onclick="handleDownloadFeed(this)">DOWNLOAD 4K</a>
@@ -341,7 +314,6 @@
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
         let deferredPrompt;
-        let lastScroll = 0;
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
@@ -360,8 +332,8 @@
             const prompt = document.getElementById('install-prompt');
             setTimeout(() => {
                 prompt.classList.add('show');
-                setTimeout(() => { prompt.classList.remove('show'); }, 5000); 
-            }, 3000); 
+                setTimeout(() => { prompt.classList.remove('show'); }, 15000); 
+            }, 10000); 
         });
 
         document.getElementById('prompt-install-btn').addEventListener('click', async () => {
@@ -435,7 +407,6 @@
         }
 
         function openPreview(id) {
-            updatePreviewTime();
             document.getElementById('modal-img').src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; 
             document.getElementById('modal-4k').href = `https://drive.google.com/uc?export=download&id=${id}`;
             document.getElementById('modal-std').href = `https://drive.google.com/thumbnail?id=${id}&sz=w1280`;
@@ -445,27 +416,7 @@
 
         function closePreview() {
             document.getElementById('preview-modal').style.display = 'none';
-            document.getElementById('smart-ui').classList.remove('active');
-            document.getElementById('ui-toggle').innerText = "SHOW UI";
-            document.getElementById('ui-toggle').classList.remove('active');
             document.body.style.overflow = 'auto';
-        }
-
-        function toggleSmartUI() {
-            const ui = document.getElementById('smart-ui');
-            const btn = document.getElementById('ui-toggle');
-            ui.classList.toggle('active');
-            btn.classList.toggle('active');
-            btn.innerText = ui.classList.contains('active') ? "HIDE UI" : "SHOW UI";
-        }
-
-        function updatePreviewTime() {
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-            const dateOptions = { weekday: 'long', month: 'long', day: 'numeric' };
-            const dateStr = now.toLocaleDateString('en-US', dateOptions);
-            document.getElementById('preview-time').innerText = timeStr;
-            document.getElementById('preview-date').innerText = dateStr;
         }
 
         function toggleFav(id, btn) {
@@ -492,6 +443,7 @@
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
 
+        let lastScroll = 0;
         document.getElementById('theme-btn').onclick = () => {
             const isDark = document.documentElement.getAttribute('data-theme') !== 'dark';
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
