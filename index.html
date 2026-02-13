@@ -100,13 +100,17 @@
             border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer;
         }
 
+        /* Update: Auto-hide bottom nav */
         .bottom-nav {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(30px) saturate(180%);
             -webkit-backdrop-filter: blur(30px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 10px 25px; border-radius: 40px; display: flex; gap: 30px; z-index: 9999;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); width: fit-content;
+            transition: transform 0.4s ease;
         }
+        .bottom-nav.nav-hidden { transform: translateX(-50%) translateY(120px); }
+
         [data-theme="dark"] .bottom-nav { background: rgba(15, 23, 42, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); }
         .nav-item {
             font-size: 1.5rem; color: var(--text); cursor: pointer;
@@ -153,15 +157,23 @@
             max-width: 1400px; margin: 0 auto; justify-items: center;
         }
         
+        /* Update: Shimmer Skeleton */
         .card { 
             width: 100%; position: relative; background: var(--glass); backdrop-filter: blur(25px); 
             border-radius: 20px; overflow: hidden; border: 1px solid var(--border); 
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); opacity: 0; transform: translateY(30px); 
         }
         .card.show { opacity: 1; transform: translateY(0); }
-        .img-box { width: 100%; height: 260px; position: relative; overflow: hidden; cursor: zoom-in; }
+        .img-box { 
+            width: 100%; height: 260px; position: relative; overflow: hidden; cursor: zoom-in;
+            background: linear-gradient(90deg, var(--glass) 25%, var(--border) 50%, var(--glass) 75%);
+            background-size: 200% 100%; animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        
         .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.2s; }
         .card img.loaded { opacity: 1; }
+        .img-box.img-ready { animation: none; background: transparent; }
         
         .fav-btn, .copy-btn { 
             position: absolute; right: 10px; width: 35px; height: 35px; border-radius: 50%; 
@@ -172,14 +184,13 @@
         .copy-btn { top: 50px; }
         .fav-btn.active { color: #ff4757; background: white; }
         .info { padding: 12px; border-top: 1px solid var(--border); }
-        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.7rem; }
+        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.7rem; transition: 0.3s; }
 
         @media (min-width: 768px) {
             .gallery { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 20px; }
             .img-box { height: 450px; }
         }
 
-        /* --- Preview Modal Updates --- */
         #preview-modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.4); z-index: 10000; align-items: center; justify-content: center; 
@@ -232,7 +243,7 @@
         <button class="nav-btn" id="theme-btn">🌙</button>
     </div>
 
-    <nav class="bottom-nav">
+    <nav class="bottom-nav" id="main-nav">
         <button class="nav-item active" onclick="switchScreen('home', this)">🏠</button>
         <button class="nav-item" onclick="switchScreen('search', this)">🔍</button>
         <button class="nav-item" onclick="switchScreen('fav', this)">❤️</button>
@@ -267,8 +278,8 @@
             <img id="modal-img" src="">
         </div>
         <div class="dl-options">
-            <a id="modal-4k" class="dl-link ultra-btn" href="#" target="_blank">DOWNLOAD 4K</a>
-            <a id="modal-std" class="dl-link std-btn" href="#" target="_blank">DOWNLOAD HD</a>
+            <a id="modal-4k" class="dl-link ultra-btn" href="#" target="_blank" onclick="handleDownloadFeed(this)">DOWNLOAD 4K</a>
+            <a id="modal-std" class="dl-link std-btn" href="#" target="_blank" onclick="handleDownloadFeed(this)">DOWNLOAD HD</a>
         </div>
     </div>
 
@@ -288,6 +299,19 @@
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
         let deferredPrompt;
+
+        // Auto-hide Navigation logic
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            const nav = document.getElementById('main-nav');
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                nav.classList.add('nav-hidden');
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+            lastScroll = currentScroll;
+        });
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -341,13 +365,32 @@
                 card.className = 'card';
                 card.innerHTML = `
                     <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="toggleFav('${img.id}', this)">❤️</button>
-                    <div class="img-box" onclick="openPreview('${img.id}')">
-                        <img src="https://drive.google.com/thumbnail?id=${img.id}&sz=w1000" onload="this.classList.add('loaded')" loading="lazy">
+                    <div class="img-box">
+                        <img src="https://drive.google.com/thumbnail?id=${img.id}&sz=w1000" onload="imageLoaded(this)" onclick="openPreview('${img.id}')" loading="lazy">
                     </div>
                     <div class="info"><button class="download-btn" onclick="openPreview('${img.id}')">DOWNLOAD</button></div>`;
                 container.appendChild(card);
                 setTimeout(() => card.classList.add('show'), i * 50);
             });
+        }
+
+        function imageLoaded(img) {
+            img.classList.add('loaded');
+            img.parentElement.classList.add('img-ready');
+        }
+
+        function handleDownloadFeed(btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "STARTING...";
+            btn.style.opacity = "0.7";
+            setTimeout(() => {
+                btn.innerText = "SUCCESS ✔";
+                showToast("Download Initialized!");
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.opacity = "1";
+                }, 2000);
+            }, 1000);
         }
 
         function openPreview(id) {
