@@ -62,7 +62,6 @@
             min-height: 100vh;
             background: linear-gradient(135deg, hsl(var(--dynamic-hue), 25%, 94%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 30%, 97%) 100%);
             background-attachment: fixed;
-            /* Prevents accidental double-tap zoom on some mobile browsers */
             touch-action: manipulation;
         }
 
@@ -83,7 +82,6 @@
         }
         .nav-btn:hover { transform: scale(1.1) rotate(10deg); border-color: var(--blue); }
 
-        /* Counter Circle Style */
         .count-circle {
             background: var(--glass);
             backdrop-filter: blur(15px);
@@ -127,13 +125,21 @@
             cursor: pointer; font-weight: 700; outline: none; transition: 0.3s;
         }
 
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        /* Updated Gallery for 2 columns on mobile */
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; 
+            padding: 15px; 
+            max-width: 1400px; 
+            margin: 0 auto; 
+        }
         
         .card { 
             position: relative;
             background: var(--glass); 
             backdrop-filter: blur(25px); 
-            border-radius: 35px; overflow: hidden; 
+            border-radius: 25px; overflow: hidden; 
             border: 1px solid var(--border); 
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
             opacity: 0; transform: translateY(30px); 
@@ -141,35 +147,45 @@
         }
         .card.show { opacity: 1; transform: translateY(0); }
         .card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+            transform: translateY(-10px) scale(1.02);
             border-color: var(--blue);
         }
         
         .fav-btn, .copy-btn { 
-            position: absolute; right: 20px; width: 45px; height: 45px; 
+            position: absolute; right: 10px; width: 35px; height: 35px; 
             border-radius: 50%; border: none; cursor: pointer; z-index: 10; 
             backdrop-filter: blur(10px); display: flex; align-items: center; 
             justify-content: center; transition: 0.3s; color: white; background: rgba(0,0,0,0.25);
+            font-size: 0.9rem;
         }
-        .fav-btn { top: 20px; }
-        .copy-btn { top: 75px; }
+        .fav-btn { top: 10px; }
+        .copy-btn { top: 50px; }
         .fav-btn.active { color: #ff4757; background: white; }
-        .fav-btn:hover, .copy-btn:hover { background: var(--blue); transform: scale(1.1); }
         
-        .img-box { width: 100%; height: 450px; position: relative; overflow: hidden; cursor: zoom-in; }
+        /* Updated image box height for mobile grid */
+        .img-box { width: 100%; height: 260px; position: relative; overflow: hidden; cursor: zoom-in; }
         .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.2s cubic-bezier(0.2, 0, 0.2, 1); }
         .card img.loaded { opacity: 1; }
-        .card:hover img { transform: scale(1.1); }
         
-        .info { padding: 25px; display: flex; gap: 10px; border-top: 1px solid var(--border); transition: 0.3s; }
+        .info { padding: 15px; display: flex; gap: 8px; border-top: 1px solid var(--border); }
         
         .download-btn { 
-            flex: 1; background: var(--blue); color: white; border: none; padding: 14px; 
-            border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s; 
-            text-transform: uppercase; letter-spacing: 1px;
+            flex: 1; background: var(--blue); color: white; border: none; padding: 10px; 
+            border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; 
+            text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem;
         }
-        .download-btn:hover { filter: brightness(1.1); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4); }
+
+        /* Desktop view adjustment (Back to 3+ columns) */
+        @media (min-width: 768px) {
+            .gallery { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 20px; }
+            .img-box { height: 450px; }
+            .fav-btn, .copy-btn { right: 20px; width: 45px; height: 45px; font-size: 1.2rem; }
+            .fav-btn { top: 20px; }
+            .copy-btn { top: 75px; }
+            .download-btn { padding: 14px; font-size: 0.9rem; border-radius: 20px; }
+            .info { padding: 25px; }
+            .card { border-radius: 35px; }
+        }
 
         #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(30px); flex-direction: column; }
         .phone-frame { width: 280px; height: 580px; border: 12px solid #1a1a1a; border-radius: 50px; overflow: hidden; background: #000; box-shadow: 0 0 80px rgba(37, 99, 235, 0.3); }
@@ -194,7 +210,7 @@
         footer { text-align: center; padding: 80px 20px; font-size: 13px; border-top: 1px solid var(--border); margin-top: 50px; }
         .footer-content { opacity: 0.7; display: flex; flex-direction: column; gap: 12px; align-items: center; }
 
-        @media (max-width: 600px) { h1 { font-size: 2.8rem; } .phone-frame { width: 240px; height: 500px; } .gallery { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { h1 { font-size: 2.2rem; } .phone-frame { width: 240px; height: 500px; } }
     </style>
 </head>
 <body>
@@ -335,10 +351,7 @@
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
                 allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
-                
-                // Update the circle counter here
                 document.getElementById('total-count').innerText = allData.length;
-                
                 render(allData);
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
