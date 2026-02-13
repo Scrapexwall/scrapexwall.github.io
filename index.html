@@ -82,7 +82,7 @@
         /* Header */
         header { text-align: center; padding: 70px 20px 30px; }
         h1 { font-size: 3.2rem; margin: 0; font-weight: 800; letter-spacing: -1.5px; }
-        h1 span { color: var(--blue); } /* ScrapeX এর কালার */
+        h1 span { color: var(--blue); } 
         .creator { font-size: 10px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; opacity: 0.8; }
         #greeting { margin-top: 10px; font-weight: 600; opacity: 0.7; font-size: 0.9rem; }
         
@@ -121,7 +121,8 @@
         .card img.loaded { opacity: 1; }
         
         .info { padding: 20px; display: flex; gap: 10px; border-top: 1px solid var(--border); }
-        .download-btn { flex: 1; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 15px; font-weight: 700; cursor: pointer; }
+        .download-btn { flex: 1; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; letter-spacing: 1px; }
+        .download-btn:active { transform: scale(0.95); opacity: 0.9; }
 
         /* Modal Settings */
         #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(25px); flex-direction: column; }
@@ -151,7 +152,8 @@
     </div>
 
     <header>
-        <h1><span>SCRAPEX</span></h1> <div class="creator">CREATED BY ASISH</div>
+        <h1><span>SCRAPEX</span></h1> 
+        <div class="creator">CREATED BY ASISH</div>
         <p id="greeting">Loading...</p>
     </header>
 
@@ -182,7 +184,7 @@
             <div style="font-weight: 800; letter-spacing: 1px;">
                 © 2026 <span style="color: var(--blue);">SCRAPEX</span> | ASISH
             </div>
-            <a href="sitemap.xml" target="_blank" style="color: var(--text); text-decoration: none; font-weight: 700;">
+            <a href="sitemap.xml" target="_blank" style="color: var(--text); text-decoration: none; font-weight: 700; opacity: 0.8;">
                 Sitemap
             </a>
         </div>
@@ -193,7 +195,6 @@
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
 
-        // 1. SMART GREETING
         function setGreeting() {
             const hr = new Date().getHours();
             let msg = hr < 12 ? "Good Morning, explorer! 🌅" : hr < 17 ? "Good Afternoon! ☀️" : hr < 21 ? "Good Evening! 🌆" : "Good Night! 🌙";
@@ -201,7 +202,6 @@
         }
         setGreeting();
 
-        // 2. RENDER GALLERY
         function render(data) {
             const gallery = document.getElementById('gallery');
             gallery.innerHTML = '';
@@ -217,14 +217,13 @@
                         <img src="https://drive.google.com/thumbnail?id=${img.id}&sz=w1000" onload="this.classList.add('loaded')" loading="lazy">
                     </div>
                     <div class="info">
-                        <button class="download-btn" onclick="openPreview('${img.id}')">VIEW & DOWNLOAD</button>
+                        <button class="download-btn" onclick="openPreview('${img.id}')">DOWNLOAD</button>
                     </div>`;
                 gallery.appendChild(card);
                 setTimeout(() => card.classList.add('show'), i * 50);
             });
         }
 
-        // 3. SHARE LOGIC
         async function shareImg(id) {
             const shareData = {
                 title: 'ScrapeX Wallpapers',
@@ -240,7 +239,6 @@
             } catch (err) { console.log(err); }
         }
 
-        // 4. PREVIEW & BACK BUTTON
         function openPreview(id) {
             document.getElementById('modal-img').src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; 
             document.getElementById('modal-4k').href = `https://drive.google.com/uc?export=download&id=${id}`;
@@ -258,7 +256,6 @@
         window.onpopstate = () => closePreview();
         document.getElementById('close-modal').onclick = () => window.history.back();
 
-        // 5. THEME & APP START
         async function start() {
             try {
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
