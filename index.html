@@ -354,13 +354,13 @@
             document.getElementById('sort-menu').classList.remove('show');
         };
 
+        // --- FIXED SORT LOGIC ---
         function sortData(type) {
-            let sorted = [...allData];
+            let sorted = [...allData]; // Create a shallow copy to avoid mutating original array
             if(type === 'new') {
                 sorted.reverse();
             } else if(type === 'old') {
-                // 'old' means keep the original spreadsheet order
-                sorted = [...allData];
+                // Keep the copy as it is (Original spreadsheet order)
             } else if(type === 'random') {
                 sorted.sort(() => Math.random() - 0.5);
             }
@@ -414,8 +414,8 @@
             document.getElementById(screenId + '-screen').classList.add('active');
             btn.classList.add('active');
             
-            // Latest items always first in Search and Favorites by default
-            if(screenId === 'fav') render(allData.filter(img => favorites.includes(img.id)).reverse(), 'fav-gallery');
+            // Fixed screen logic to always show latest first by default when switching
+            if(screenId === 'fav') render([...allData].filter(img => favorites.includes(img.id)).reverse(), 'fav-gallery');
             if(screenId === 'search') render([...allData].reverse(), 'search-gallery');
             
             window.scrollTo({top: 0, behavior: 'smooth'});
@@ -509,7 +509,7 @@
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('total-count').innerText = allData.length;
                 
-                // Default: Newest first
+                // Default: Newest first (Copy created with [...allData])
                 render([...allData].reverse());
                 
                 setGreeting();
