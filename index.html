@@ -134,14 +134,14 @@
             z-index: 5;
         }
         
-        .fav-btn, .share-btn { 
+        .fav-btn, .copy-btn { 
             position: absolute; right: 15px; width: 40px; height: 40px; 
             border-radius: 50%; border: none; cursor: pointer; z-index: 10; 
             backdrop-filter: blur(10px); display: flex; align-items: center; 
             justify-content: center; transition: 0.3s; color: white; background: rgba(0,0,0,0.2);
         }
         .fav-btn { top: 15px; }
-        .share-btn { top: 65px; }
+        .copy-btn { top: 65px; }
         .fav-btn.active { color: #ff4757; background: white; }
         
         .img-box { width: 100%; height: 400px; position: relative; overflow: hidden; cursor: zoom-in; }
@@ -165,6 +165,15 @@
         .ultra-btn { background: var(--blue); color: white; }
         .std-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
 
+        /* Toast Message Style */
+        #toast {
+            visibility: hidden; min-width: 200px; background-color: var(--blue); color: #fff;
+            text-align: center; border-radius: 50px; padding: 12px 24px; position: fixed;
+            z-index: 10001; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: 0.4s; opacity: 0;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); }
         footer { text-align: center; padding: 60px 20px; font-size: 13px; }
         .footer-content { opacity: 0.7; display: flex; flex-direction: column; gap: 10px; align-items: center; }
@@ -175,6 +184,8 @@
 <body>
 
     <div id="tsparticles"></div>
+    <div id="toast">Message here</div>
+
     <div class="top-nav">
         <button class="nav-btn" id="random-btn">🎲</button>
         <button class="nav-btn" id="theme-btn">🌙</button>
@@ -206,8 +217,8 @@
             <img id="modal-img" src="">
         </div>
         <div class="dl-options">
-            <a id="modal-4k" class="dl-link ultra-btn" href="#" onclick="celebrate()" target="_blank">DOWNLOAD 4K (ULTRA)</a>
-            <a id="modal-std" class="dl-link std-btn" href="#" onclick="celebrate()" target="_blank">DOWNLOAD HD (DATA SAVER)</a>
+            <a id="modal-4k" class="dl-link ultra-btn" href="#" onclick="handleDownload('4K')" target="_blank">DOWNLOAD 4K (ULTRA)</a>
+            <a id="modal-std" class="dl-link std-btn" href="#" onclick="handleDownload('HD')" target="_blank">DOWNLOAD HD (DATA SAVER)</a>
         </div>
     </div>
 
@@ -227,6 +238,13 @@
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
 
+        function showToast(msg) {
+            const toast = document.getElementById("toast");
+            toast.innerText = msg;
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
         function setGreeting() {
             const hr = new Date().getHours();
             let msg = hr < 12 ? "Good Morning, explorer! 🌅" : hr < 17 ? "Good Afternoon! ☀️" : hr < 21 ? "Good Evening! 🌆" : "Good Night! 🌙";
@@ -244,7 +262,7 @@
                     <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
                         ${favorites.includes(img.id) ? '❤️' : '♡'}
                     </button>
-                    <button class="share-btn" onclick="event.stopPropagation(); shareImg('${img.id}')">🔗</button>
+                    <button class="copy-btn" title="Copy URL" onclick="event.stopPropagation(); copyUrl('${img.id}')">🔗</button>
                     <div class="img-box" onclick="openPreview('${img.id}')">
                         <img src="https://drive.google.com/thumbnail?id=${img.id}&sz=w1000" onload="this.classList.add('loaded')" loading="lazy">
                     </div>
@@ -256,6 +274,18 @@
             });
         }
 
+        function copyUrl(id) {
+            const url = `https://drive.google.com/uc?export=view&id=${id}`;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("Link Copied to Clipboard! 📋");
+            });
+        }
+
+        function handleDownload(quality) {
+            celebrate();
+            showToast(`Downloading ${quality} Wallpaper... 📥`);
+        }
+
         document.getElementById('search-input').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const filtered = allData.filter(img => {
@@ -264,21 +294,6 @@
             });
             render(filtered);
         });
-
-        async function shareImg(id) {
-            const shareData = {
-                title: 'ScrapeX Wallpapers',
-                text: 'Check out this stunning 4K wallpaper!',
-                url: `https://drive.google.com/uc?export=view&id=${id}`
-            };
-            try {
-                if (navigator.share) await navigator.share(shareData);
-                else {
-                    navigator.clipboard.writeText(shareData.url);
-                    alert('Link copied!');
-                }
-            } catch (err) { console.log(err); }
-        }
 
         function openPreview(id) {
             document.getElementById('modal-img').src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; 
@@ -309,8 +324,14 @@
 
         function toggleFav(id, btn) {
             const index = favorites.indexOf(id);
-            if (index > -1) { favorites.splice(index, 1); btn.innerHTML = '♡'; btn.classList.remove('active'); }
-            else { favorites.push(id); btn.innerHTML = '❤️'; btn.classList.add('active'); }
+            if (index > -1) { 
+                favorites.splice(index, 1); btn.innerHTML = '♡'; btn.classList.remove('active'); 
+                showToast("Removed from Favorites! 💔");
+            }
+            else { 
+                favorites.push(id); btn.innerHTML = '❤️'; btn.classList.add('active'); 
+                showToast("Added to Favorites! ❤️");
+            }
             localStorage.setItem('scrapeX_favs', JSON.stringify(favorites));
         }
 
@@ -326,12 +347,16 @@
             const isDark = document.documentElement.getAttribute('data-theme') !== 'dark';
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
             themeBtn.innerText = isDark ? '☀️' : '🌙';
+            showToast(`${isDark ? 'Dark' : 'Light'} Mode Activated!`);
         };
 
         function celebrate() { confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 } }); }
 
         document.getElementById('random-btn').onclick = () => {
-            if(allData.length) openPreview(allData[Math.floor(Math.random() * allData.length)].id);
+            if(allData.length) {
+                openPreview(allData[Math.floor(Math.random() * allData.length)].id);
+                showToast("Surprise Wallpaper! 🎲");
+            }
         };
 
         tsParticles.load("tsparticles", { particles: { number: { value: 6 }, color: { value: "#2563eb" }, opacity: { value: 0.2 }, size: { value: 80 }, move: { enable: true, speed: 1 } } });
