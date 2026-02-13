@@ -142,18 +142,36 @@
             color: var(--text);
         }
 
-        /* Fixed Side Panel: Left -320px to hide shadow as well */
+        /* Side Panel Style */
         .side-panel {
             position: fixed; top: 0; left: -320px; width: 280px; height: 100%;
             background: var(--glass); backdrop-filter: blur(40px);
             border-right: 1px solid var(--border); z-index: 10005;
             transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: 10px 0 50px rgba(0,0,0,0.2);
+            box-shadow: 20px 0 50px rgba(0,0,0,0.1);
             padding: 40px 20px;
-            visibility: hidden; /* Added to ensure it's completely inactive when closed */
         }
-        .side-panel.open { left: 0; visibility: visible; }
+        .side-panel.open { left: 0; }
         
+        /* New Logo Style for Side Panel */
+        .panel-logo-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .side-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid var(--blue);
+            box-shadow: var(--shadow);
+            margin-top: 15px;
+            object-fit: cover;
+            background: #fff;
+        }
+
         .panel-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.3); backdrop-filter: blur(4px);
@@ -161,7 +179,7 @@
         }
         .panel-overlay.show { display: block; opacity: 1; }
 
-        .panel-header { font-weight: 800; font-size: 1.5rem; margin-bottom: 40px; color: var(--blue); letter-spacing: -1px; }
+        .panel-header { font-weight: 800; font-size: 1.5rem; color: var(--blue); letter-spacing: -1px; text-align: center; }
         .panel-link {
             display: flex; align-items: center; gap: 15px; padding: 15px;
             margin-bottom: 10px; border-radius: 15px; color: var(--text);
@@ -278,7 +296,10 @@
 
     <div class="panel-overlay" id="panel-overlay" onclick="togglePanel()"></div>
     <div class="side-panel" id="side-panel">
-        <div class="panel-header">SCRAPEX MENU</div>
+        <div class="panel-logo-container">
+            <div class="panel-header">SCRAPEX MENU</div>
+            <img src="./Logo.png" class="side-logo" alt="ScrapeX Logo">
+        </div>
         <a href="#" class="panel-link"><ion-icon name="information-circle-outline"></ion-icon> About Us</a>
         <a href="#" class="panel-link"><ion-icon name="mail-outline"></ion-icon> Contact Us</a>
         <a href="#" class="panel-link" onclick="togglePanel()"><ion-icon name="close-outline"></ion-icon> Close Menu</a>
@@ -517,8 +538,7 @@
         async function start() {
             try {
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
-                const rawData = await res.json();
-                allData = rawData.slice().reverse(); 
+                allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('total-count').innerText = allData.length;
                 render(allData);
