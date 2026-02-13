@@ -356,8 +356,14 @@
 
         function sortData(type) {
             let sorted = [...allData];
-            if(type === 'new') sorted.reverse(); // Newest first
-            if(type === 'random') sorted.sort(() => Math.random() - 0.5);
+            if(type === 'new') {
+                sorted.reverse();
+            } else if(type === 'old') {
+                // 'old' means keep the original spreadsheet order
+                sorted = [...allData];
+            } else if(type === 'random') {
+                sorted.sort(() => Math.random() - 0.5);
+            }
             
             render(sorted);
             showToast(`Sorting: ${type.toUpperCase()}`);
@@ -407,8 +413,11 @@
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById(screenId + '-screen').classList.add('active');
             btn.classList.add('active');
-            if(screenId === 'fav') render(allData.filter(img => favorites.includes(img.id)), 'fav-gallery');
-            if(screenId === 'search') render(allData, 'search-gallery');
+            
+            // Latest items always first in Search and Favorites by default
+            if(screenId === 'fav') render(allData.filter(img => favorites.includes(img.id)).reverse(), 'fav-gallery');
+            if(screenId === 'search') render([...allData].reverse(), 'search-gallery');
+            
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
@@ -489,7 +498,7 @@
 
         document.getElementById('search-input').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = allData.filter(img => (img.name || "").toLowerCase().includes(term));
+            const filtered = allData.filter(img => (img.name || "").toLowerCase().includes(term)).reverse();
             render(filtered, 'search-gallery');
         });
 
@@ -500,7 +509,7 @@
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('total-count').innerText = allData.length;
                 
-                // ডিফল্টভাবে 'New to Old' দেখানোর জন্য ডেটাকে রিভার্স করা হয়েছে
+                // Default: Newest first
                 render([...allData].reverse());
                 
                 setGreeting();
