@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
   <url>
     <loc>https://scrapexwall.github.io/</loc>
-    <lastmod>2026-02-12</lastmod>
+    <lastmod>2026-02-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-</urlset>
 
+  <url>
+    <loc>https://scrapexwall.github.io/</loc>
+    <image:image>
+      <image:loc>https://scrapexwall.github.io/Logo.png</image:loc>
+      <image:title>ScrapeX Wallpapers Logo</image:title>
+      <image:caption>Premium 4K Liquid Collection curated by Asish</image:caption>
+    </image:image>
+  </url>
+
+</urlset>
