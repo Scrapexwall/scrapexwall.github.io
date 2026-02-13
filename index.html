@@ -60,7 +60,6 @@
             min-height: 100vh;
             background: linear-gradient(135deg, hsl(var(--dynamic-hue), 25%, 94%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 30%, 97%) 100%);
             background-attachment: fixed;
-            -webkit-font-smoothing: antialiased;
         }
 
         [data-theme="dark"] body {
@@ -69,6 +68,7 @@
         
         #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; pointer-events: none; }
 
+        /* Navigation */
         .top-nav { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; gap: 12px; }
         .nav-btn { 
             background: var(--glass); 
@@ -79,17 +79,19 @@
             color: var(--text); box-shadow: 0 8px 20px rgba(0,0,0,0.05); transition: 0.3s;
         }
         
+        /* Header */
         header { text-align: center; padding: 70px 20px 30px; }
         h1 { font-size: 3.2rem; margin: 0; font-weight: 800; letter-spacing: -1.5px; }
-        h1 span { color: var(--blue); }
+        h1 span { color: var(--blue); } /* ScrapeX এর কালার */
         .creator { font-size: 10px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; opacity: 0.8; }
         #greeting { margin-top: 10px; font-weight: 600; opacity: 0.7; font-size: 0.9rem; }
         
+        /* Controls */
         .controls { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; padding: 0 20px; }
         #sort-select { background: var(--glass); backdrop-filter: blur(15px); color: var(--text); border: 1px solid var(--border); padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: 700; outline: none; }
 
+        /* Gallery Card */
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; }
-        
         .card { 
             position: relative;
             background: var(--glass); 
@@ -102,9 +104,8 @@
             will-change: transform;
         }
         .card.show { opacity: 1; transform: translateY(0); }
-        .card:hover { transform: translateY(-10px); }
         
-        /* Floating Buttons on Card */
+        /* Buttons on Card */
         .fav-btn, .share-btn { 
             position: absolute; right: 15px; width: 40px; height: 40px; 
             border-radius: 50%; border: none; cursor: pointer; z-index: 10; 
@@ -112,9 +113,8 @@
             justify-content: center; transition: 0.3s; color: white; background: rgba(0,0,0,0.2);
         }
         .fav-btn { top: 15px; }
-        .share-btn { top: 65px; } /* Just below Like button */
+        .share-btn { top: 65px; }
         .fav-btn.active { color: #ff4757; background: white; }
-        .share-btn:active { background: var(--blue); transform: scale(0.9); }
         
         .img-box { width: 100%; height: 400px; position: relative; overflow: hidden; cursor: zoom-in; }
         .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.6s ease; }
@@ -123,7 +123,7 @@
         .info { padding: 20px; display: flex; gap: 10px; border-top: 1px solid var(--border); }
         .download-btn { flex: 1; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 15px; font-weight: 700; cursor: pointer; }
 
-        /* Preview Modal */
+        /* Modal Settings */
         #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(25px); flex-direction: column; }
         .phone-frame { width: 260px; height: 550px; border: 10px solid #111; border-radius: 45px; overflow: hidden; background: #000; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
@@ -134,8 +134,10 @@
         .ultra-btn { background: var(--blue); color: white; }
         .std-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
 
+        /* Loader & Footer */
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); }
-        footer { text-align: center; padding: 50px 20px; font-size: 13px; opacity: 0.6; }
+        footer { text-align: center; padding: 60px 20px; font-size: 13px; }
+        .footer-content { opacity: 0.7; display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
         @media (max-width: 600px) { h1 { font-size: 2.5rem; } .phone-frame { width: 230px; height: 480px; } }
     </style>
@@ -149,9 +151,8 @@
     </div>
 
     <header>
-        <h1>Scrape<span>X</span></h1>
-        <div class="creator">CREATED BY ASISH</div>
-        <p id="greeting">Loading greetings...</p>
+        <h1><span>SCRAPEX</span></h1> <div class="creator">CREATED BY ASISH</div>
+        <p id="greeting">Loading...</p>
     </header>
 
     <div class="controls">
@@ -176,7 +177,16 @@
         </div>
     </div>
 
-    <footer>© 2026 SCRAPEX | ASISH</footer>
+    <footer>
+        <div class="footer-content">
+            <div style="font-weight: 800; letter-spacing: 1px;">
+                © 2026 <span style="color: var(--blue);">SCRAPEX</span> | ASISH
+            </div>
+            <a href="sitemap.xml" target="_blank" style="color: var(--text); text-decoration: none; font-weight: 700;">
+                Sitemap
+            </a>
+        </div>
+    </footer>
 
     <script>
         const script_url = 'https://script.google.com/macros/s/AKfycbwNwvh0AEvhLJhLQV-gmCnQxOSI4o2zu4T91bDVpDY_41wWwhn-uHgQ2hbbWUm2mNdz5A/exec';
@@ -191,7 +201,7 @@
         }
         setGreeting();
 
-        // 2. RENDER GALLERY WITH SHARE BUTTON
+        // 2. RENDER GALLERY
         function render(data) {
             const gallery = document.getElementById('gallery');
             gallery.innerHTML = '';
@@ -202,9 +212,7 @@
                     <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
                         ${favorites.includes(img.id) ? '❤️' : '♡'}
                     </button>
-                    <button class="share-btn" title="Share" onclick="event.stopPropagation(); shareImg('${img.id}')">
-                        🔗
-                    </button>
+                    <button class="share-btn" onclick="event.stopPropagation(); shareImg('${img.id}')">🔗</button>
                     <div class="img-box" onclick="openPreview('${img.id}')">
                         <img src="https://drive.google.com/thumbnail?id=${img.id}&sz=w1000" onload="this.classList.add('loaded')" loading="lazy">
                     </div>
@@ -216,7 +224,7 @@
             });
         }
 
-        // 3. SHARE FUNCTION
+        // 3. SHARE LOGIC
         async function shareImg(id) {
             const shareData = {
                 title: 'ScrapeX Wallpapers',
@@ -227,12 +235,12 @@
                 if (navigator.share) await navigator.share(shareData);
                 else {
                     navigator.clipboard.writeText(shareData.url);
-                    alert('Link copied to clipboard!');
+                    alert('Link copied!');
                 }
             } catch (err) { console.log(err); }
         }
 
-        // 4. PREVIEW & BACK BUTTON FIX
+        // 4. PREVIEW & BACK BUTTON
         function openPreview(id) {
             document.getElementById('modal-img').src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; 
             document.getElementById('modal-4k').href = `https://drive.google.com/uc?export=download&id=${id}`;
@@ -250,7 +258,7 @@
         window.onpopstate = () => closePreview();
         document.getElementById('close-modal').onclick = () => window.history.back();
 
-        // Core App Logic
+        // 5. THEME & APP START
         async function start() {
             try {
                 const res = await fetch(`${script_url}?t=${Date.now()}`);
