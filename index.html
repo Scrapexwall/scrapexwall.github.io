@@ -11,8 +11,24 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScrapeX Wallpapers | Premium 4K Liquid Collection</title>
     
+    <title>ScrapeX Wallpapers | Premium 4K Liquid Collection</title>
+    <meta name="description" content="Explore and download premium 4K wallpapers from ScrapeX. High-quality backgrounds curated by Asish with a stunning Liquid Glass UI.">
+    <meta name="keywords" content="ScrapeX, 4K Wallpapers, Premium Backgrounds, Liquid Glass UI, Wallpapers by Asish, HD Mobile Wallpapers">
+    <meta name="author" content="Asish">
+    <link rel="canonical" href="https://scrapexwall.github.io/">
+    <meta name="google-site-verification" content="cc74590bdad7369b" />
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scrapexwall.github.io/">
+    <meta property="og:title" content="ScrapeX Wallpapers | Premium 4K Liquid Collection">
+    <meta property="og:description" content="Experience the best 4K wallpapers with a unique Liquid Glass interface.">
+    <meta property="og:image" content="./Logo.png">
+
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="./Logo.png">
+
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-confetti@2.12.0/tsparticles.confetti.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -44,6 +60,7 @@
             min-height: 100vh;
             background: linear-gradient(135deg, hsl(var(--dynamic-hue), 25%, 94%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 30%, 97%) 100%);
             background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
         }
 
         [data-theme="dark"] body {
@@ -87,7 +104,6 @@
         .info { padding: 20px; display: flex; gap: 10px; border-top: 1px solid var(--border); }
         .download-btn { flex: 2; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 15px; font-weight: 700; cursor: pointer; }
 
-        /* Modal Settings */
         #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(25px); flex-direction: column; }
         .phone-frame { width: 260px; height: 550px; border: 10px solid #111; border-radius: 45px; overflow: hidden; background: #000; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
@@ -99,7 +115,8 @@
         .std-btn { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
 
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); }
-        footer { text-align: center; padding: 60px 20px; opacity: 0.7; font-size: 13px; }
+        footer { text-align: center; padding: 60px 20px; font-size: 13px; }
+        .footer-content { opacity: 0.7; display: flex; flex-direction: column; gap: 10px; align-items: center; }
 
         @media (max-width: 600px) { h1 { font-size: 2.5rem; } .phone-frame { width: 230px; height: 480px; } }
     </style>
@@ -115,15 +132,15 @@
     <header>
         <h1>Scrape<span>X</span></h1>
         <div class="creator">CREATED BY ASISH</div>
-        <p id="greeting">Loading greetings...</p>
+        <p id="greeting">Hello, explorer!</p>
     </header>
 
     <div class="controls">
-        <input type="text" id="search-input" placeholder="🔍 Search ID...">
+        <input type="text" id="search-input" placeholder="🔍 Search Wallpaper ID...">
         <select id="sort-select">
-            <option value="new">✨ NEWEST</option>
-            <option value="old">⏳ OLDEST</option>
-            <option value="fav">❤️ FAVORITES</option> 
+            <option value="new">✨ NEWEST FIRST</option>
+            <option value="old">⏳ OLDEST FIRST</option>
+            <option value="fav">❤️ MY FAVORITES</option> 
         </select>
     </div>
 
@@ -142,7 +159,10 @@
     </div>
 
     <footer>
-        © 2026 SCRAPEX | <a href="sitemap.xml" style="color:inherit">Sitemap</a>
+        <div class="footer-content">
+            <div style="font-weight: 800;">© 2026 <span style="color: var(--blue);">SCRAPEX</span> | ASISH</div>
+            <a href="sitemap.xml" target="_blank" style="color:inherit; text-decoration:none; font-weight:700;">Sitemap</a>
+        </div>
     </footer>
 
     <script>
@@ -150,7 +170,7 @@
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
 
-        // 1. SMART GREETING LOGIC
+        // 1. SMART GREETING
         function setGreeting() {
             const hr = new Date().getHours();
             let msg = "";
@@ -162,7 +182,7 @@
         }
         setGreeting();
 
-        // 2. BACK BUTTON & MODAL FIX
+        // 2. BACK BUTTON & MODAL
         function openPreview(id) {
             document.getElementById('modal-img').src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; 
             document.getElementById('modal-4k').href = `https://drive.google.com/uc?export=download&id=${id}`;
@@ -170,8 +190,6 @@
 
             document.getElementById('preview-modal').style.display = 'flex'; 
             document.body.style.overflow = 'hidden'; 
-            
-            // Push history state to handle back button
             window.history.pushState({modalOpen: true}, "");
         }
 
@@ -183,7 +201,7 @@
         window.onpopstate = function() { closePreview(); };
         document.getElementById('close-modal').onclick = () => { window.history.back(); };
 
-        // 3. CORE FUNCTIONS
+        // 3. CORE LOGIC
         function render(data) {
             const gallery = document.getElementById('gallery');
             gallery.innerHTML = '';
@@ -236,7 +254,24 @@
             render(allData.filter(img => img.id.toLowerCase().includes(term)));
         };
 
+        // Random Shake
+        let lastX, lastY, lastZ;
+        window.addEventListener('devicemotion', (e) => {
+            let acc = e.accelerationIncludingGravity;
+            if (acc && acc.x) {
+                let diff = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ);
+                if (diff > 40 && allData.length) {
+                    openPreview(allData[Math.floor(Math.random() * allData.length)].id);
+                }
+                lastX = acc.x; lastY = acc.y; lastZ = acc.z;
+            }
+        });
+        document.getElementById('random-btn').onclick = () => {
+            if(allData.length) openPreview(allData[Math.floor(Math.random() * allData.length)].id);
+        };
+
         tsParticles.load("tsparticles", { particles: { number: { value: 6 }, color: { value: "#2563eb" }, opacity: { value: 0.2 }, size: { value: 80 }, move: { enable: true, speed: 1 } } });
     </script>
 </body>
 </html>
+
