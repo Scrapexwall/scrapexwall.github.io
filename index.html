@@ -138,7 +138,7 @@
             width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
             font-size: 0.85rem; font-weight: 800; color: var(--blue); box-shadow: var(--shadow);
         }
-
+        
         header { text-align: center; padding: 80px 20px 20px; }
         h1 { 
             font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; 
@@ -360,10 +360,8 @@
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             document.getElementById(screenId + '-screen').classList.add('active');
             btn.classList.add('active');
-            
-            if(screenId === 'fav') render([...allData].filter(img => favorites.includes(img.id)).reverse(), 'fav-gallery');
-            if(screenId === 'search') render([...allData].reverse(), 'search-gallery');
-            
+            if(screenId === 'fav') render(allData.filter(img => favorites.includes(img.id)), 'fav-gallery');
+            if(screenId === 'search') render(allData, 'search-gallery');
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
@@ -444,7 +442,7 @@
 
         document.getElementById('search-input').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = allData.filter(img => (img.name || "").toLowerCase().includes(term)).reverse();
+            const filtered = allData.filter(img => (img.name || "").toLowerCase().includes(term));
             render(filtered, 'search-gallery');
         });
 
@@ -454,9 +452,7 @@
                 allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('total-count').innerText = allData.length;
-                
-                render([...allData].reverse());
-                
+                render(allData);
                 setGreeting();
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
