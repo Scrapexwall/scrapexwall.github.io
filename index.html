@@ -499,8 +499,10 @@
                 allData = await res.json();
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('total-count').innerText = allData.length;
-                // Default render to Newest first
-                render([...allData].reverse());
+                
+                // ডিফল্টভাবে 'Newest First' রেন্ডার করার জন্য array reverse করা হলো
+                render([...allData].reverse()); 
+                
                 setGreeting();
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
