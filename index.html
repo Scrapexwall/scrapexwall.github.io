@@ -139,7 +139,6 @@
             font-size: 0.85rem; font-weight: 800; color: var(--blue); box-shadow: var(--shadow);
         }
         
-        /* Header specific updates */
         header { text-align: center; padding: 80px 20px 20px; }
         h1 { 
             font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; 
@@ -148,9 +147,24 @@
         h1 span { color: var(--blue); }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         
+        /* Cyberpunk Glitch Effect for Creator */
         .creator { 
             font-size: 11px; letter-spacing: 5px; color: var(--blue); 
             font-weight: 800; margin-top: 8px; opacity: 0.8; text-transform: uppercase; 
+            position: relative; display: inline-block;
+        }
+        .creator::before, .creator::after {
+            content: "CREATED BY ASISH"; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
+        }
+        .creator::before { color: #ff00c1; z-index: -1; animation: glitch 0.4s cubic-bezier(.25, .46, .45, .94) both infinite; }
+        .creator::after { color: #00fff9; z-index: -2; animation: glitch 0.4s cubic-bezier(.25, .46, .45, .94) reverse both infinite; }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
         }
 
         #greeting { margin-top: 15px; font-weight: 600; opacity: 0.7; font-size: 1rem; }
@@ -231,6 +245,10 @@
 
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 3px; }
         footer { text-align: center; padding: 40px 20px 100px; font-size: 13px; opacity: 0.6; }
+        
+        /* Footer Specific styles */
+        .footer-brand { color: #fff; }
+        .footer-brand span { color: var(--blue); }
     </style>
 </head>
 <body>
@@ -301,7 +319,7 @@
     <footer>
         <div class="footer-content">
             <div style="margin-bottom: 5px;">
-                © 2026 <b>SCRAPEX</b> | ASISH
+                © 2026 <b class="footer-brand">SCRAPE<span>X</span></b> | ASISH
             </div>
             <div>
                 <a href="sitemap.xml" style="color: var(--text); text-decoration: none; font-weight: 700; font-size: 10px; letter-spacing: 2px; opacity: 0.4;">SITEMAP</a>
@@ -314,6 +332,16 @@
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
         let deferredPrompt;
+        let lastScroll = 0;
+
+        // Back Button Logic for Modal
+        window.addEventListener('popstate', function(event) {
+            const modal = document.getElementById('preview-modal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
@@ -332,8 +360,8 @@
             const prompt = document.getElementById('install-prompt');
             setTimeout(() => {
                 prompt.classList.add('show');
-                setTimeout(() => { prompt.classList.remove('show'); }, 15000); 
-            }, 10000); 
+                setTimeout(() => { prompt.classList.remove('show'); }, 5000); 
+            }, 2000); 
         });
 
         document.getElementById('prompt-install-btn').addEventListener('click', async () => {
@@ -412,11 +440,16 @@
             document.getElementById('modal-std').href = `https://drive.google.com/thumbnail?id=${id}&sz=w1280`;
             document.getElementById('preview-modal').style.display = 'flex'; 
             document.body.style.overflow = 'hidden'; 
+            // Push state for back button handling
+            window.history.pushState({previewOpen: true}, "");
         }
 
         function closePreview() {
             document.getElementById('preview-modal').style.display = 'none';
             document.body.style.overflow = 'auto';
+            if(window.history.state && window.history.state.previewOpen) {
+                window.history.back();
+            }
         }
 
         function toggleFav(id, btn) {
@@ -443,7 +476,6 @@
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
 
-        let lastScroll = 0;
         document.getElementById('theme-btn').onclick = () => {
             const isDark = document.documentElement.getAttribute('data-theme') !== 'dark';
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
