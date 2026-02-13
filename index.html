@@ -147,19 +147,9 @@
         h1 span { color: var(--blue); }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         
-        /* Preferred Subtle Glitch for Creator */
         .creator { 
             font-size: 11px; letter-spacing: 5px; color: var(--blue); 
             font-weight: 800; margin-top: 8px; opacity: 0.8; text-transform: uppercase; 
-            position: relative;
-            animation: glitch-anim 3s infinite;
-        }
-        @keyframes glitch-anim {
-            0% { text-shadow: none; transform: translateX(0); }
-            7% { text-shadow: 2px 0 #ff4757, -2px 0 #2ecc71; transform: translateX(1px); }
-            10% { text-shadow: none; transform: translateX(0); }
-            15% { text-shadow: 2px 0 #ff4757, -2px 0 #2ecc71; transform: translateX(-1px); }
-            20% { text-shadow: none; }
         }
 
         #greeting { margin-top: 15px; font-weight: 600; opacity: 0.7; font-size: 1rem; }
@@ -238,14 +228,10 @@
         #toast.show { visibility: visible; opacity: 1; }
 
         #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 3px; }
-        footer { text-align: center; padding: 40px 20px 100px; font-size: 13px; opacity: 0.6; }
+        footer { text-align: center; padding: 40px 20px 100px; font-size: 13px; opacity: 0.8; color: var(--text); }
         
-        /* Footer Specific styles */
-        .footer-brand { color: #fff; } /* SCRAPEX White */
-        .footer-name { 
-            color: var(--blue); /* ASISH Blue */
-            font-weight: 700;
-        }
+        /* Footer Text Color Synchronization */
+        .footer-content, .footer-brand, .footer-name { color: var(--text); transition: color 0.5s ease; }
     </style>
 </head>
 <body>
