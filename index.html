@@ -139,21 +139,6 @@
             font-size: 0.85rem; font-weight: 800; color: var(--blue); box-shadow: var(--shadow);
         }
 
-        /* Sort Menu UI */
-        #sort-menu {
-            position: absolute; top: 60px; right: 0; background: var(--glass); 
-            backdrop-filter: blur(25px); border: 1px solid var(--border);
-            border-radius: 20px; padding: 10px; display: none; flex-direction: column;
-            gap: 5px; box-shadow: var(--shadow); z-index: 10000; min-width: 140px;
-        }
-        #sort-menu.show { display: flex; animation: screenFade 0.3s ease; }
-        .sort-option {
-            padding: 10px 15px; border-radius: 12px; font-size: 0.8rem; font-weight: 700;
-            color: var(--text); cursor: pointer; transition: 0.2s; text-align: left;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .sort-option:hover { background: var(--blue); color: white; }
-        
         header { text-align: center; padding: 80px 20px 20px; }
         h1 { 
             font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; 
@@ -265,18 +250,6 @@
 
     <div class="top-nav">
         <div class="count-circle" id="total-count">0</div>
-        
-        <div style="position: relative;">
-            <button class="nav-btn" id="sort-btn">
-                <ion-icon name="funnel-outline"></ion-icon>
-            </button>
-            <div id="sort-menu">
-                <div class="sort-option" onclick="sortData('new')"><ion-icon name="time-outline"></ion-icon> New to Old</div>
-                <div class="sort-option" onclick="sortData('old')"><ion-icon name="hourglass-outline"></ion-icon> Old to New</div>
-                <div class="sort-option" onclick="sortData('random')"><ion-icon name="shuffle-outline"></ion-icon> Random</div>
-            </div>
-        </div>
-
         <button class="nav-btn" id="theme-btn">🌙</button>
     </div>
 
@@ -344,32 +317,6 @@
         let deferredPrompt;
         let lastScroll = 0;
 
-        // Sort Control Logic
-        document.getElementById('sort-btn').onclick = (e) => {
-            e.stopPropagation();
-            document.getElementById('sort-menu').classList.toggle('show');
-        };
-
-        window.onclick = () => {
-            document.getElementById('sort-menu').classList.remove('show');
-        };
-
-        // --- FIXED SORT LOGIC ---
-        function sortData(type) {
-            let sorted = [...allData]; // Create a shallow copy to avoid mutating original array
-            if(type === 'new') {
-                sorted.reverse();
-            } else if(type === 'old') {
-                // Keep the copy as it is (Original spreadsheet order)
-            } else if(type === 'random') {
-                sorted.sort(() => Math.random() - 0.5);
-            }
-            
-            render(sorted);
-            showToast(`Sorting: ${type.toUpperCase()}`);
-            document.getElementById('sort-menu').classList.remove('show');
-        }
-
         window.addEventListener('popstate', function(event) {
             const modal = document.getElementById('preview-modal');
             if (modal.style.display === 'flex') {
@@ -414,7 +361,6 @@
             document.getElementById(screenId + '-screen').classList.add('active');
             btn.classList.add('active');
             
-            // Fixed screen logic to always show latest first by default when switching
             if(screenId === 'fav') render([...allData].filter(img => favorites.includes(img.id)).reverse(), 'fav-gallery');
             if(screenId === 'search') render([...allData].reverse(), 'search-gallery');
             
@@ -509,7 +455,6 @@
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('total-count').innerText = allData.length;
                 
-                // Default: Newest first (Copy created with [...allData])
                 render([...allData].reverse());
                 
                 setGreeting();
