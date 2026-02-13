@@ -10,7 +10,7 @@
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>ScrapeX Wallpapers | Premium 4K Liquid Collection</title>
     <meta name="description" content="Explore and download premium 4K wallpapers from ScrapeX. High-quality backgrounds curated by Asish with a stunning Liquid Glass UI.">
@@ -62,6 +62,8 @@
             min-height: 100vh;
             background: linear-gradient(135deg, hsl(var(--dynamic-hue), 25%, 94%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 30%, 97%) 100%);
             background-attachment: fixed;
+            /* Prevents accidental double-tap zoom on some mobile browsers */
+            touch-action: manipulation;
         }
 
         [data-theme="dark"] body {
