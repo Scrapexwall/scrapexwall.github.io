@@ -78,18 +78,44 @@
             color: var(--text); box-shadow: 0 8px 20px rgba(0,0,0,0.05); transition: 0.3s;
         }
         
-        header { text-align: center; padding: 70px 20px 30px; }
+        header { text-align: center; padding: 70px 20px 10px; }
         h1 { font-size: 3.2rem; margin: 0; font-weight: 800; letter-spacing: -1.5px; }
         h1 span { color: var(--blue); } 
         .creator { font-size: 10px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; opacity: 0.8; }
         #greeting { margin-top: 10px; font-weight: 600; opacity: 0.7; font-size: 0.9rem; }
         
+        /* Search Bar Style */
+        .search-box {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        #search-input {
+            width: 100%;
+            padding: 14px 25px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 600;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        #search-input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.2);
+        }
+
         .controls { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 30px; padding: 0 20px; }
         #sort-select { background: var(--glass); backdrop-filter: blur(15px); color: var(--text); border: 1px solid var(--border); padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: 700; outline: none; }
 
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1400px; margin: 0 auto; }
         
-        /* Floating Glass Card & Hover Effects */
         .card { 
             position: relative;
             background: var(--glass); 
@@ -102,8 +128,6 @@
             will-change: transform, box-shadow;
         }
         .card.show { opacity: 1; transform: translateY(0); }
-        
-        /* Hover Effect: Float up and Blue Glow */
         .card:hover {
             transform: translateY(-12px) scale(1.02);
             box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15), 0 0 20px rgba(37, 99, 235, 0.1);
@@ -124,8 +148,6 @@
         .img-box { width: 100%; height: 400px; position: relative; overflow: hidden; cursor: zoom-in; }
         .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.8s ease; }
         .card img.loaded { opacity: 1; }
-        
-        /* Zoom effect on hover */
         .card:hover img { transform: scale(1.1); }
         
         .info { padding: 20px; display: flex; gap: 10px; border-top: 1px solid var(--border); transition: 0.3s; }
@@ -163,6 +185,10 @@
         <h1><span>SCRAPEX</span></h1> <div class="creator">CREATED BY ASISH</div>
         <p id="greeting">Loading...</p>
     </header>
+
+    <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search (e.g. Mahakal, Nature)...">
+    </div>
 
     <div class="controls">
         <select id="sort-select">
@@ -230,6 +256,16 @@
                 setTimeout(() => card.classList.add('show'), i * 50);
             });
         }
+
+        // Search Logic: Filtering based on File Name
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allData.filter(img => {
+                const fileName = img.name ? img.name.toLowerCase() : "";
+                return fileName.includes(term);
+            });
+            render(filtered);
+        });
 
         async function shareImg(id) {
             const shareData = {
