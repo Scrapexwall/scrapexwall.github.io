@@ -63,33 +63,60 @@
             background: linear-gradient(135deg, hsl(var(--dynamic-hue), 25%, 94%) 0%, hsl(calc(var(--dynamic-hue) + 40deg), 30%, 97%) 100%);
             background-attachment: fixed;
             touch-action: manipulation;
+            padding-bottom: 90px;
         }
 
-        [data-theme="dark"] body {
-            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
-        }
-        
+        [data-theme="dark"] body { background: linear-gradient(135deg, #020617 0%, #0f172a 100%); }
         #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; pointer-events: none; }
+
+        /* Floating Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 40px;
+            display: flex;
+            gap: 30px;
+            z-index: 9999;
+            box-shadow: var(--shadow);
+            width: fit-content;
+        }
+        .nav-item {
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: 0.3s;
+            opacity: 0.6;
+            background: none;
+            border: none;
+            padding: 8px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .nav-item.active { opacity: 1; color: var(--blue); transform: scale(1.15); }
+
+        /* Screens Visibility Control */
+        .page-screen { display: none; }
+        .page-screen.active { display: block; animation: screenFade 0.4s ease; }
+        @keyframes screenFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .top-nav { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; gap: 12px; }
         .nav-btn { 
-            background: var(--glass); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid var(--border); 
+            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border); 
             cursor: pointer; width: 46px; height: 46px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; font-size: 1.2rem; 
-            color: var(--text); box-shadow: var(--shadow); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text); box-shadow: var(--shadow); transition: 0.4s;
         }
-        .nav-btn:hover { transform: scale(1.1) rotate(10deg); border-color: var(--blue); }
 
         .count-circle {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border);
-            width: 46px; height: 46px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.85rem; font-weight: 800; color: var(--blue);
-            box-shadow: var(--shadow);
+            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border);
+            width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; font-weight: 800; color: var(--blue); box-shadow: var(--shadow);
         }
         
         header { text-align: center; padding: 80px 20px 20px; }
@@ -102,144 +129,66 @@
         
         .search-box { max-width: 550px; margin: 30px auto; padding: 0 20px; }
         #search-input {
-            width: 100%;
-            padding: 16px 25px;
-            border-radius: 50px;
-            border: 1px solid var(--border);
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            color: var(--text);
-            font-size: 1rem;
-            font-weight: 600;
-            outline: none;
-            transition: 0.4s;
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-        #search-input:focus { border-color: var(--blue); transform: scale(1.02); box-shadow: 0 0 25px rgba(37, 99, 235, 0.2); }
-
-        .controls { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 40px; padding: 0 20px; }
-        #sort-select { 
-            background: var(--glass); backdrop-filter: blur(15px); color: var(--text); 
-            border: 1px solid var(--border); padding: 12px 25px; border-radius: 50px; 
-            cursor: pointer; font-weight: 700; outline: none; transition: 0.3s;
+            width: 100%; padding: 16px 25px; border-radius: 50px; border: 1px solid var(--border);
+            background: var(--glass); backdrop-filter: blur(25px); color: var(--text);
+            font-size: 1rem; font-weight: 600; outline: none; transition: 0.4s; text-align: center;
         }
 
         .gallery { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; 
-            padding: 12px; 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            justify-content: center;
-            justify-items: center;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; 
+            max-width: 1400px; margin: 0 auto; justify-items: center;
         }
         
         .card { 
-            width: 100%;
-            position: relative;
-            background: var(--glass); 
-            backdrop-filter: blur(25px); 
-            border-radius: 20px; overflow: hidden; 
-            border: 1px solid var(--border); 
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
-            opacity: 0; transform: translateY(30px); 
-            box-shadow: var(--shadow);
+            width: 100%; position: relative; background: var(--glass); backdrop-filter: blur(25px); 
+            border-radius: 20px; overflow: hidden; border: 1px solid var(--border); 
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); opacity: 0; transform: translateY(30px); 
         }
         .card.show { opacity: 1; transform: translateY(0); }
-        .card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--blue);
-        }
+        .img-box { width: 100%; height: 260px; position: relative; overflow: hidden; cursor: zoom-in; }
+        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.2s; }
+        .card img.loaded { opacity: 1; }
         
         .fav-btn, .copy-btn { 
-            position: absolute; right: 10px; width: 35px; height: 35px; 
-            border-radius: 50%; border: none; cursor: pointer; z-index: 10; 
-            backdrop-filter: blur(10px); display: flex; align-items: center; 
-            justify-content: center; transition: 0.3s; color: white; background: rgba(0,0,0,0.25);
-            font-size: 0.9rem;
+            position: absolute; right: 10px; width: 35px; height: 35px; border-radius: 50%; 
+            border: none; cursor: pointer; z-index: 10; backdrop-filter: blur(10px); 
+            display: flex; align-items: center; justify-content: center; color: white; background: rgba(0,0,0,0.25);
         }
         .fav-btn { top: 10px; }
         .copy-btn { top: 50px; }
         .fav-btn.active { color: #ff4757; background: white; }
-        
-        .img-box { width: 100%; height: 260px; position: relative; overflow: hidden; cursor: zoom-in; }
-        .card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 1.2s cubic-bezier(0.2, 0, 0.2, 1); }
-        .card img.loaded { opacity: 1; }
-        
-        .info { padding: 12px; display: flex; gap: 8px; border-top: 1px solid var(--border); }
-        
-        .download-btn { 
-            flex: 1; background: var(--blue); color: white; border: none; padding: 10px; 
-            border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; 
-            text-transform: uppercase; letter-spacing: 1px; font-size: 0.7rem;
-        }
+        .info { padding: 12px; border-top: 1px solid var(--border); }
+        .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.7rem; }
 
         @media (min-width: 768px) {
             .gallery { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding: 20px; }
             .img-box { height: 450px; }
-            .fav-btn, .copy-btn { right: 20px; width: 45px; height: 45px; font-size: 1.2rem; }
-            .fav-btn { top: 20px; }
-            .copy-btn { top: 75px; }
-            .download-btn { padding: 14px; font-size: 0.9rem; border-radius: 20px; }
-            .info { padding: 25px; }
-            .card { border-radius: 35px; }
         }
 
-        /* UPDATED PREVIEW MODAL WITH GLASS EFFECT */
         #preview-modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0, 0, 0, 0.4); 
-            z-index: 10000; 
-            align-items: center; 
-            justify-content: center; 
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            flex-direction: column; 
-            transition: 0.3s;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.4); z-index: 10000; align-items: center; justify-content: center; 
+            backdrop-filter: blur(40px); flex-direction: column; 
         }
-
-        .phone-frame { width: 280px; height: 580px; border: 12px solid #1a1a1a; border-radius: 50px; overflow: hidden; background: #000; box-shadow: 0 0 80px rgba(0, 0, 0, 0.5); }
+        .phone-frame { width: 280px; height: 580px; border: 12px solid #1a1a1a; border-radius: 50px; overflow: hidden; background: #000; }
         #modal-img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Modal Close Button Updated for Glass Effect Visibility */
-        #close-modal { 
-            position: absolute; 
-            top: 30px; 
-            right: 30px; 
-            font-size: 40px; 
-            color: var(--text); 
-            cursor: pointer; 
-            transition: 0.3s; 
-            z-index: 10001;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        #close-modal:hover { transform: rotate(90deg); color: var(--blue); }
+        #close-modal { position: absolute; top: 30px; right: 30px; font-size: 40px; color: var(--text); cursor: pointer; }
 
         .dl-options { margin-top: 25px; display: flex; flex-direction: column; gap: 12px; width: 280px; }
-        .dl-link { text-decoration: none; padding: 15px; border-radius: 20px; text-align: center; font-weight: 800; font-size: 0.9rem; transition: 0.3s; letter-spacing: 1px; }
-        .ultra-btn { background: var(--blue); color: white; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3); }
-        .std-btn { background: var(--glass); color: var(--text); border: 1px solid var(--border); backdrop-filter: blur(10px); }
+        .dl-link { text-decoration: none; padding: 15px; border-radius: 20px; text-align: center; font-weight: 800; font-size: 0.9rem; transition: 0.3s; }
+        .ultra-btn { background: var(--blue); color: white; }
+        .std-btn { background: var(--glass); color: var(--text); border: 1px solid var(--border); }
 
         #toast {
             visibility: hidden; min-width: 250px; background-color: var(--blue); color: #fff;
             text-align: center; border-radius: 50px; padding: 15px 30px; position: fixed;
-            z-index: 10001; left: 50%; bottom: 30px; transform: translateX(-50%);
-            font-weight: 700; box-shadow: 0 15px 35px rgba(0,0,0,0.3); transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); opacity: 0;
+            z-index: 10001; left: 50%; bottom: 100px; transform: translateX(-50%);
+            font-weight: 700; transition: 0.5s; opacity: 0;
         }
-        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+        #toast.show { visibility: visible; opacity: 1; }
 
-        #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); font-size: 1.2rem; letter-spacing: 3px; }
-        footer { text-align: center; padding: 80px 20px; font-size: 13px; border-top: 1px solid var(--border); margin-top: 50px; }
-        .footer-content { opacity: 0.7; display: flex; flex-direction: column; gap: 12px; align-items: center; }
-
-        @media (max-width: 600px) { h1 { font-size: 2.2rem; } .phone-frame { width: 240px; height: 500px; } }
+        #loader { text-align: center; padding: 100px; font-weight: 800; color: var(--blue); letter-spacing: 3px; }
+        footer { text-align: center; padding: 40px 20px 100px; font-size: 13px; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -248,51 +197,53 @@
     <div id="toast">Message here</div>
 
     <div class="top-nav">
-        <div class="count-circle" id="total-count" title="Total Wallpapers">0</div>
-        <button class="nav-btn" id="random-btn" title="Random">🎲</button>
-        <button class="nav-btn" id="theme-btn" title="Theme">🌙</button>
+        <div class="count-circle" id="total-count">0</div>
+        <button class="nav-btn" id="theme-btn">🌙</button>
     </div>
 
-    <header>
-        <h1><span>SCRAPEX</span></h1> 
-        <div class="creator">CREATED BY ASISH</div>
-        <p id="greeting">Loading...</p>
-    </header>
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchScreen('home', this)">🏠</button>
+        <button class="nav-item" onclick="switchScreen('search', this)">🔍</button>
+        <button class="nav-item" onclick="switchScreen('fav', this)">❤️</button>
+    </nav>
 
-    <div class="search-box">
-        <input type="text" id="search-input" placeholder="Search Wallpapers...">
+    <div id="home-screen" class="page-screen active">
+        <header>
+            <h1><span>SCRAPEX</span></h1> 
+            <div class="creator">CREATED BY ASISH</div>
+            <p id="greeting">Loading...</p>
+        </header>
+        <div id="loader">SYNCHRONIZING ART...</div>
+        <div class="gallery" id="gallery"></div>
     </div>
 
-    <div class="controls">
-        <select id="sort-select">
-            <option value="new">✨ NEWEST COLLECTION</option>
-            <option value="old">⏳ OLDEST COLLECTION</option>
-            <option value="fav">❤️ MY FAVORITES</option> 
-        </select>
+    <div id="search-screen" class="page-screen">
+        <header><h2><span>SEARCH</span></h2></header>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search Wallpapers...">
+        </div>
+        <div class="gallery" id="search-gallery"></div>
     </div>
 
-    <div id="loader">SYNCHRONIZING ART...</div>
-    <div class="gallery" id="gallery"></div>
+    <div id="fav-screen" class="page-screen">
+        <header><h2><span>FAVORITES</span></h2></header>
+        <div class="gallery" id="fav-gallery"></div>
+    </div>
 
     <div id="preview-modal">
-        <span id="close-modal">&times;</span>
+        <span id="close-modal" onclick="closePreview()">&times;</span>
         <div class="phone-frame">
             <img id="modal-img" src="">
         </div>
         <div class="dl-options">
-            <a id="modal-4k" class="dl-link ultra-btn" href="#" onclick="handleDownload('4K')" target="_blank">DOWNLOAD 4K (ULTRA)</a>
-            <a id="modal-std" class="dl-link std-btn" href="#" onclick="handleDownload('HD')" target="_blank">DOWNLOAD HD (STD)</a>
+            <a id="modal-4k" class="dl-link ultra-btn" href="#" target="_blank">DOWNLOAD 4K</a>
+            <a id="modal-std" class="dl-link std-btn" href="#" target="_blank">DOWNLOAD HD</a>
         </div>
     </div>
 
     <footer>
         <div class="footer-content">
-            <div style="font-weight: 800; letter-spacing: 2px;">
-                © 2026 <span style="color: var(--blue);">SCRAPEX</span> | ASISH
-            </div>
-            <a href="sitemap.xml" target="_blank" style="color: var(--text); text-decoration: none; font-weight: 700; opacity: 0.5;">
-                Sitemap
-            </a>
+            © 2026 <b>SCRAPEX</b> | ASISH
         </div>
     </footer>
 
@@ -301,62 +252,43 @@
         let allData = [];
         let favorites = JSON.parse(localStorage.getItem('scrapeX_favs')) || [];
 
+        function switchScreen(screenId, btn) {
+            document.querySelectorAll('.page-screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(screenId + '-screen').classList.add('active');
+            btn.classList.add('active');
+            if(screenId === 'fav') render(allData.filter(img => favorites.includes(img.id)), 'fav-gallery');
+            if(screenId === 'search') render(allData, 'search-gallery');
+            window.scrollTo(0,0);
+        }
+
         function showToast(msg) {
             const toast = document.getElementById("toast");
-            toast.innerText = msg;
-            toast.className = "show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            toast.innerText = msg; toast.className = "show";
+            setTimeout(() => { toast.className = ""; }, 3000);
         }
 
         function setGreeting() {
             const hr = new Date().getHours();
-            let msg = hr < 12 ? "Good Morning! 🌅" : hr < 17 ? "Good Afternoon! ☀️" : hr < 21 ? "Good Evening! 🌆" : "Good Night! 🌙";
-            document.getElementById('greeting').innerText = msg;
+            document.getElementById('greeting').innerText = hr < 12 ? "Good Morning! 🌅" : hr < 17 ? "Good Afternoon! ☀️" : "Good Evening! 🌆";
         }
-        setGreeting();
 
-        function render(data) {
-            const gallery = document.getElementById('gallery');
-            gallery.innerHTML = '';
+        function render(data, containerId = 'gallery') {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
             data.forEach((img, i) => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${img.id}', this)">
-                        ${favorites.includes(img.id) ? '❤️' : '♡'}
-                    </button>
-                    <button class="copy-btn" title="Copy URL" onclick="event.stopPropagation(); copyUrl('${img.id}')">🔗</button>
+                    <button class="fav-btn ${favorites.includes(img.id) ? 'active' : ''}" onclick="toggleFav('${img.id}', this)">❤️</button>
                     <div class="img-box" onclick="openPreview('${img.id}')">
                         <img src="https://drive.google.com/thumbnail?id=${img.id}&sz=w1000" onload="this.classList.add('loaded')" loading="lazy">
                     </div>
-                    <div class="info">
-                        <button class="download-btn" onclick="openPreview('${img.id}')">DOWNLOAD</button>
-                    </div>`;
-                gallery.appendChild(card);
+                    <div class="info"><button class="download-btn" onclick="openPreview('${img.id}')">DOWNLOAD</button></div>`;
+                container.appendChild(card);
                 setTimeout(() => card.classList.add('show'), i * 50);
             });
         }
-
-        function copyUrl(id) {
-            const url = `https://drive.google.com/uc?export=view&id=${id}`;
-            navigator.clipboard.writeText(url).then(() => {
-                showToast("Link Copied! 📋");
-            });
-        }
-
-        function handleDownload(quality) {
-            celebrate();
-            showToast(`Downloading ${quality} Wallpaper... 📥`);
-        }
-
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = allData.filter(img => {
-                const fileName = img.name ? img.name.toLowerCase() : "";
-                return fileName.includes(term);
-            });
-            render(filtered);
-        });
 
         function openPreview(id) {
             document.getElementById('modal-img').src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; 
@@ -364,7 +296,6 @@
             document.getElementById('modal-std').href = `https://drive.google.com/thumbnail?id=${id}&sz=w1280`;
             document.getElementById('preview-modal').style.display = 'flex'; 
             document.body.style.overflow = 'hidden'; 
-            window.history.pushState({modalOpen: true}, "");
         }
 
         function closePreview() {
@@ -372,8 +303,18 @@
             document.body.style.overflow = 'auto';
         }
 
-        window.onpopstate = () => closePreview();
-        document.getElementById('close-modal').onclick = () => window.history.back();
+        function toggleFav(id, btn) {
+            const index = favorites.indexOf(id);
+            if (index > -1) { favorites.splice(index, 1); btn.classList.remove('active'); showToast("Removed from Favorites!"); }
+            else { favorites.push(id); btn.classList.add('active'); showToast("Added to Favorites! ❤️"); }
+            localStorage.setItem('scrapeX_favs', JSON.stringify(favorites));
+        }
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allData.filter(img => (img.name || "").toLowerCase().includes(term));
+            render(filtered, 'search-gallery');
+        });
 
         async function start() {
             try {
@@ -382,56 +323,18 @@
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('total-count').innerText = allData.length;
                 render(allData);
+                setGreeting();
             } catch (e) { document.getElementById('loader').innerText = "Sync Failed!"; }
         }
-        start();
 
-        function toggleFav(id, btn) {
-            const index = favorites.indexOf(id);
-            if (index > -1) { 
-                favorites.splice(index, 1); btn.innerHTML = '♡'; btn.classList.remove('active'); 
-                showToast("Removed from Favorites!");
-            }
-            else { 
-                favorites.push(id); btn.innerHTML = '❤️'; btn.classList.add('active'); 
-                showToast("Added to Favorites! ❤️");
-            }
-            localStorage.setItem('scrapeX_favs', JSON.stringify(favorites));
-        }
-
-        document.getElementById('sort-select').onchange = (e) => {
-            let data = [...allData];
-            if (e.target.value === 'old') data.reverse();
-            if (e.target.value === 'fav') data = allData.filter(img => favorites.includes(img.id));
-            render(data);
-        };
-
-        const themeBtn = document.getElementById('theme-btn');
-        themeBtn.onclick = () => {
+        document.getElementById('theme-btn').onclick = () => {
             const isDark = document.documentElement.getAttribute('data-theme') !== 'dark';
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-            themeBtn.innerText = isDark ? '☀️' : '🌙';
-            showToast(`${isDark ? 'Dark' : 'Light'} Mode!`);
+            document.getElementById('theme-btn').innerText = isDark ? '☀️' : '🌙';
         };
 
-        function celebrate() { confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 } }); }
-
-        document.getElementById('random-btn').onclick = () => {
-            if(allData.length) {
-                openPreview(allData[Math.floor(Math.random() * allData.length)].id);
-                showToast("Feeling Lucky! 🎲");
-            }
-        };
-
-        tsParticles.load("tsparticles", { 
-            particles: { 
-                number: { value: 8 }, 
-                color: { value: "#2563eb" }, 
-                opacity: { value: 0.1 }, 
-                size: { value: 80 }, 
-                move: { enable: true, speed: 0.8 } 
-            } 
-        });
+        tsParticles.load("tsparticles", { particles: { number: { value: 6 }, move: { enable: true, speed: 0.8 }, opacity: { value: 0.1 } } });
+        start();
     </script>
 </body>
 </html>
