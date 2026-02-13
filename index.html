@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W8FBMDQBY7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-W8FBMDQBY7');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -80,7 +88,6 @@
         h1 span { color: var(--blue); }
         .creator { font-size: 10px; letter-spacing: 4px; color: var(--blue); font-weight: 800; margin-top: 5px; opacity: 0.8; }
         
-        /* Updated Controls: Search + Sort */
         .controls { 
             display: flex;
             flex-direction: column;
@@ -106,10 +113,7 @@
             transition: 0.3s;
         }
 
-        #search-input:focus {
-            border-color: var(--blue);
-            max-width: 350px;
-        }
+        #search-input:focus { border-color: var(--blue); max-width: 350px; }
 
         #sort-select { 
             background: var(--glass); 
@@ -150,15 +154,7 @@
         
         .info { padding: 20px; display: flex; gap: 10px; border-top: 1px solid var(--border); transform: translateZ(20px); }
         .download-btn { flex: 2; background: var(--blue); color: white; border: none; padding: 12px; border-radius: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .dl-menu { 
-            display: none; position: absolute; bottom: 120%; left: 0; width: 100%; 
-            background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--border); 
-            border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); z-index: 100; overflow: hidden;
-        }
-        .dl-menu.active { display: block; }
-        .dl-item { padding: 15px; font-size: 0.85rem; font-weight: 700; color: var(--text); text-decoration: none; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); }
-        .dl-item:hover { background: var(--blue); color: white; }
-
+        
         .copy-btn { flex: 1; background: var(--glass); color: var(--text); border: 1px solid var(--border); border-radius: 15px; cursor: pointer; font-weight: 600; }
 
         #preview-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(25px); flex-direction: column; padding: 20px; }
@@ -194,7 +190,7 @@
     </header>
 
     <div class="controls">
-        <input type="text" id="search-input" placeholder="🔍 Instant Search...">
+        <input type="text" id="search-input" placeholder="🔍 Search Wallpaper ID...">
         <select id="sort-select">
             <option value="new">✨ NEWEST FIRST</option>
             <option value="old">⏳ OLDEST FIRST</option>
@@ -242,7 +238,7 @@
 
         // 1. Next Level Function: 3D Tilt Effect
         function initTilt() {
-            if (window.innerWidth < 1024) return; // Disable on mobile for performance
+            if (window.innerWidth < 1024) return;
             document.querySelectorAll('.card').forEach(card => {
                 card.addEventListener('mousemove', (e) => {
                     const rect = card.getBoundingClientRect();
@@ -264,13 +260,11 @@
         function celebrate() {
             const count = 200;
             const defaults = { origin: { y: 0.7 } };
-
             function fire(particleRatio, opts) {
                 confetti(Object.assign({}, defaults, opts, {
                     particleCount: Math.floor(count * particleRatio)
                 }));
             }
-
             fire(0.25, { spread: 26, startVelocity: 55 });
             fire(0.2, { spread: 60 });
             fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
@@ -290,14 +284,11 @@
         let moveCounter = 0;
         window.addEventListener('devicemotion', (e) => {
             let acc = e.accelerationIncludingGravity;
-            if (acc.x) {
+            if (acc && acc.x) {
                 let diff = Math.abs(acc.x + acc.y + acc.z - lastX - lastY - lastZ);
-                if (diff > 30) { // Sensitivity threshold
+                if (diff > 30) {
                     moveCounter++;
-                    if (moveCounter > 5) {
-                        triggerRandom();
-                        moveCounter = 0;
-                    }
+                    if (moveCounter > 5) { triggerRandom(); moveCounter = 0; }
                 }
                 lastX = acc.x; lastY = acc.y; lastZ = acc.z;
             }
@@ -310,7 +301,6 @@
                 if ('vibrate' in navigator) navigator.vibrate(50);
             }
         }
-
         document.getElementById('random-btn').onclick = triggerRandom;
 
         // Core Functions
@@ -339,7 +329,6 @@
             initTilt();
         }
 
-        // Other original logic (Theme, Fav, Modal, Start)
         const themeBtn = document.getElementById('theme-btn');
         const updateTheme = (isDark) => {
             document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
