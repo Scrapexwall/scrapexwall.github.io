@@ -125,13 +125,51 @@
         .page-screen.active { display: block; animation: screenFade 0.4s ease; }
         @keyframes screenFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .top-nav { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; gap: 12px; }
+        /* Modified top-nav for left side menu */
+        .top-nav { position: fixed; top: 20px; width: calc(100% - 40px); left: 20px; z-index: 9999; display: flex; justify-content: space-between; align-items: center; }
+        .nav-right-group { display: flex; gap: 12px; }
+
         .nav-btn { 
             background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border); 
             cursor: pointer; width: 46px; height: 46px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; font-size: 1.2rem; 
             color: var(--text); box-shadow: var(--shadow); transition: 0.4s;
         }
+
+        /* Black & White Glass Effect for Menu */
+        .menu-btn {
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(15px) grayscale(1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+        }
+
+        /* Side Panel Style */
+        .side-panel {
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+            background: var(--glass); backdrop-filter: blur(40px);
+            border-right: 1px solid var(--border); z-index: 10005;
+            transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: 20px 0 50px rgba(0,0,0,0.1);
+            padding: 40px 20px;
+        }
+        .side-panel.open { left: 0; }
+        .panel-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(4px);
+            z-index: 10004; display: none; opacity: 0; transition: 0.4s;
+        }
+        .panel-overlay.show { display: block; opacity: 1; }
+
+        .panel-header { font-weight: 800; font-size: 1.5rem; margin-bottom: 40px; color: var(--blue); letter-spacing: -1px; }
+        .panel-link {
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            margin-bottom: 10px; border-radius: 15px; color: var(--text);
+            text-decoration: none; font-weight: 600; transition: 0.3s;
+            background: rgba(255,255,255,0.05);
+        }
+        .panel-link:hover { background: var(--blue); color: white; transform: translateX(10px); }
+        .panel-link ion-icon { font-size: 1.4rem; }
 
         .count-circle {
             background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border);
@@ -239,6 +277,14 @@
     <div id="tsparticles"></div>
     <div id="toast">Message here</div>
 
+    <div class="panel-overlay" id="panel-overlay" onclick="togglePanel()"></div>
+    <div class="side-panel" id="side-panel">
+        <div class="panel-header">SCRAPEX MENU</div>
+        <a href="#" class="panel-link"><ion-icon name="information-circle-outline"></ion-icon> About Us</a>
+        <a href="#" class="panel-link"><ion-icon name="mail-outline"></ion-icon> Contact Us</a>
+        <a href="#" class="panel-link" onclick="togglePanel()"><ion-icon name="close-outline"></ion-icon> Close Menu</a>
+    </div>
+
     <div id="install-prompt">
         <img src="./Logo.png" class="prompt-icon" alt="App Icon">
         <div class="prompt-text">
@@ -249,8 +295,14 @@
     </div>
 
     <div class="top-nav">
-        <div class="count-circle" id="total-count">0</div>
-        <button class="nav-btn" id="theme-btn">🌙</button>
+        <button class="nav-btn menu-btn" onclick="togglePanel()">
+            <ion-icon name="menu-outline"></ion-icon>
+        </button>
+
+        <div class="nav-right-group">
+            <div class="count-circle" id="total-count">0</div>
+            <button class="nav-btn" id="theme-btn">🌙</button>
+        </div>
     </div>
 
     <nav class="bottom-nav" id="main-nav">
@@ -317,11 +369,29 @@
         let deferredPrompt;
         let lastScroll = 0;
 
+        // Side Panel Toggle Function
+        function togglePanel() {
+            const panel = document.getElementById('side-panel');
+            const overlay = document.getElementById('panel-overlay');
+            panel.classList.toggle('open');
+            if(panel.classList.contains('open')) {
+                overlay.style.display = 'block';
+                setTimeout(() => overlay.classList.add('show'), 10);
+            } else {
+                overlay.classList.remove('show');
+                setTimeout(() => overlay.style.display = 'none', 400);
+            }
+        }
+
         window.addEventListener('popstate', function(event) {
             const modal = document.getElementById('preview-modal');
+            const panel = document.getElementById('side-panel');
             if (modal.style.display === 'flex') {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
+            }
+            if (panel.classList.contains('open')) {
+                togglePanel();
             }
         });
 
