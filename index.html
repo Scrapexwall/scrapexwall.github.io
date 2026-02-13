@@ -143,8 +143,7 @@
         h1 { font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: -2px; animation: float 6s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         
-        /* Glitch Animation shared styles for H1 and Creator */
-        /* Fixed: Applied SCRAPEX gradient and unified glitch layers */
+        /* Glitch Animation Update */
         h1 span, .creator { position: relative; display: inline-block; animation: glitch-skew 1s infinite linear alternate-reverse; }
         
         h1 span::before, h1 span::after, .creator::before, .creator::after {
@@ -160,17 +159,19 @@
             z-index: 1;
         } 
 
-        /* Fixed: Made glitch layers visible for SCRAPEX by disabling transparent fill on pseudo-elements */
+        /* Fixed Glitch Layers Visibility */
         h1 span::before, .creator::before {
             left: 2px; text-shadow: -2px 0 #ff00c1;
             clip: rect(44px, 450px, 56px, 0);
             animation: glitch-anim 5s infinite linear alternate-reverse;
-            -webkit-text-fill-color: initial; /* Allows text-shadow to be visible */
+            -webkit-text-fill-color: var(--text); /* Set color to ensure visibility */
+            opacity: 0.7;
         }
         h1 span::after, .creator::after {
             left: -2px; text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
             animation: glitch-anim2 1s infinite linear alternate-reverse;
-            -webkit-text-fill-color: initial;
+            -webkit-text-fill-color: var(--text);
+            opacity: 0.7;
         }
 
         .creator { font-size: 11px; letter-spacing: 5px; color: var(--blue); font-weight: 800; margin-top: 8px; opacity: 0.8; text-transform: uppercase; }
@@ -387,7 +388,7 @@
                     prompt.classList.remove('show');
                 }, 5000); 
 
-            }, 2000); 
+            }, 3000); 
         });
 
         document.getElementById('prompt-install-btn').addEventListener('click', async () => {
