@@ -147,24 +147,19 @@
         h1 span { color: var(--blue); }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         
-        /* Cyberpunk Glitch Effect for Creator */
+        /* Preferred Subtle Glitch for Creator */
         .creator { 
             font-size: 11px; letter-spacing: 5px; color: var(--blue); 
             font-weight: 800; margin-top: 8px; opacity: 0.8; text-transform: uppercase; 
-            position: relative; display: inline-block;
+            position: relative;
+            animation: glitch-anim 3s infinite;
         }
-        .creator::before, .creator::after {
-            content: "CREATED BY ASISH"; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
-        }
-        .creator::before { color: #ff00c1; z-index: -1; animation: glitch 0.4s cubic-bezier(.25, .46, .45, .94) both infinite; }
-        .creator::after { color: #00fff9; z-index: -2; animation: glitch 0.4s cubic-bezier(.25, .46, .45, .94) reverse both infinite; }
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
+        @keyframes glitch-anim {
+            0% { text-shadow: none; transform: translateX(0); }
+            7% { text-shadow: 2px 0 #ff4757, -2px 0 #2ecc71; transform: translateX(1px); }
+            10% { text-shadow: none; transform: translateX(0); }
+            15% { text-shadow: 2px 0 #ff4757, -2px 0 #2ecc71; transform: translateX(-1px); }
+            20% { text-shadow: none; }
         }
 
         #greeting { margin-top: 15px; font-weight: 600; opacity: 0.7; font-size: 1rem; }
@@ -198,13 +193,12 @@
         .card img.loaded { opacity: 1; }
         .img-box.img-ready { animation: none; background: transparent; }
         
-        .fav-btn, .copy-btn { 
+        .fav-btn { 
             position: absolute; right: 10px; width: 35px; height: 35px; border-radius: 50%; 
             border: none; cursor: pointer; z-index: 10; backdrop-filter: blur(10px); 
             display: flex; align-items: center; justify-content: center; color: white; background: rgba(0,0,0,0.25);
+            top: 10px;
         }
-        .fav-btn { top: 10px; }
-        .copy-btn { top: 50px; }
         .fav-btn.active { color: #ff4757; background: white; }
         .info { padding: 12px; border-top: 1px solid var(--border); }
         .download-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 0.7rem; transition: 0.3s; }
@@ -247,8 +241,11 @@
         footer { text-align: center; padding: 40px 20px 100px; font-size: 13px; opacity: 0.6; }
         
         /* Footer Specific styles */
-        .footer-brand { color: #fff; }
-        .footer-brand span { color: var(--blue); }
+        .footer-brand { color: #fff; } /* SCRAPEX White */
+        .footer-name { 
+            color: var(--blue); /* ASISH Blue */
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -319,7 +316,7 @@
     <footer>
         <div class="footer-content">
             <div style="margin-bottom: 5px;">
-                © 2026 <b class="footer-brand">SCRAPE<span>X</span></b> | ASISH
+                © 2026 <b class="footer-brand">SCRAPEX</b> | <span class="footer-name">ASISH</span>
             </div>
             <div>
                 <a href="sitemap.xml" style="color: var(--text); text-decoration: none; font-weight: 700; font-size: 10px; letter-spacing: 2px; opacity: 0.4;">SITEMAP</a>
@@ -334,7 +331,6 @@
         let deferredPrompt;
         let lastScroll = 0;
 
-        // Back Button Logic for Modal
         window.addEventListener('popstate', function(event) {
             const modal = document.getElementById('preview-modal');
             if (modal.style.display === 'flex') {
@@ -440,7 +436,6 @@
             document.getElementById('modal-std').href = `https://drive.google.com/thumbnail?id=${id}&sz=w1280`;
             document.getElementById('preview-modal').style.display = 'flex'; 
             document.body.style.overflow = 'hidden'; 
-            // Push state for back button handling
             window.history.pushState({previewOpen: true}, "");
         }
 
