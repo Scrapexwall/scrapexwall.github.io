@@ -312,7 +312,7 @@
             lastScroll = currentScroll;
         });
 
-        // Install Prompt Logic: Show after 3s, Auto-hide after 30s
+        // Install Prompt Logic: Show after 10s, Auto-hide after 15s
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -321,12 +321,12 @@
             setTimeout(() => {
                 prompt.classList.add('show');
                 
-                // 30 second por automatic hide korar jonno
+                // 15 second por automatic hide korar jonno
                 setTimeout(() => {
                     prompt.classList.remove('show');
-                }, 30000); 
+                }, 15000); 
 
-            }, 3000);
+            }, 10000); // 10 second wait before showing
         });
 
         document.getElementById('prompt-install-btn').addEventListener('click', async () => {
