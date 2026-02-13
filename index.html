@@ -144,7 +144,51 @@
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
         h1 span { background: linear-gradient(to right, var(--blue), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; } 
         
-        .creator { font-size: 11px; letter-spacing: 5px; color: var(--blue); font-weight: 800; margin-top: 8px; opacity: 0.8; text-transform: uppercase; }
+        /* Glitch Animation for Creator Text */
+        .creator { 
+            font-size: 11px; letter-spacing: 5px; color: var(--blue); font-weight: 800; 
+            margin-top: 8px; opacity: 0.8; text-transform: uppercase; 
+            position: relative; display: inline-block;
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+        .creator::before, .creator::after {
+            content: 'CREATED BY ASISH';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: transparent;
+        }
+        .creator::before {
+            left: 2px; text-shadow: -2px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+        .creator::after {
+            left: -2px; text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+            animation: glitch-anim2 1s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(31px, 9999px, 94px, 0); }
+            20% { clip: rect(62px, 9999px, 42px, 0); }
+            40% { clip: rect(16px, 9999px, 78px, 0); }
+            60% { clip: rect(87px, 9999px, 11px, 0); }
+            80% { clip: rect(54px, 9999px, 25px, 0); }
+            100% { clip: rect(9px, 9999px, 69px, 0); }
+        }
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(12px, 9999px, 55px, 0); }
+            40% { clip: rect(82px, 9999px, 19px, 0); }
+            60% { clip: rect(44px, 9999px, 76px, 0); }
+            80% { clip: rect(2px, 9999px, 35px, 0); }
+            100% { clip: rect(90px, 9999px, 15px, 0); }
+        }
+        @keyframes glitch-skew {
+            0% { transform: skew(1deg); }
+            10% { transform: skew(-3deg); }
+            20% { transform: skew(4deg); }
+            30% { transform: skew(0deg); }
+            100% { transform: skew(0deg); }
+        }
+
         #greeting { margin-top: 15px; font-weight: 600; opacity: 0.7; font-size: 1rem; }
         
         .search-box { max-width: 550px; margin: 30px auto; padding: 0 20px; }
@@ -331,7 +375,7 @@
                 
                 setTimeout(() => {
                     prompt.classList.remove('show');
-                }, 7000); 
+                }, 5000); 
 
             }, 2000); 
         });
